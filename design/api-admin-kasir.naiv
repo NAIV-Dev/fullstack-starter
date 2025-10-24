@@ -1,0 +1,88 @@
+api get /admin/kasir {
+  alias adminGetKasir
+  description list kasir user
+  headers {
+    authorization string required
+  }
+  query {
+    keyword string
+    limit number
+    offset number
+  }
+  return {
+    total number required
+    data array table.User required
+  } required
+}
+
+api post /admin/kasir {
+  alias adminCreateKasir
+  description create new kasir user
+  headers {
+    authorization string required
+  }
+  body {
+    username string required
+    password string required
+    nama string required
+    is_active boolean
+  }
+  return table.User required
+}
+
+api get /admin/kasir/:id {
+  alias adminGetKasirByID
+  description get kasir user detail
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return table.User required
+}
+
+api put /admin/kasir/:id {
+  alias adminUpdateKasirByID
+  description update kasir user detail
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  body {
+    username string
+    password string
+    nama string
+    is_active boolean
+  }
+  return table.User required
+}
+
+api delete /admin/kasir/:id {
+  alias adminDeleteKasirByID
+  description delete kasir user
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return boolean required
+}
+
+api post /admin/kasir/:id/reset-password {
+  alias adminResetPasswordKasirByID
+  description reset kasir password by admin
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  body {
+    new_password string required
+  }
+  return boolean required
+}

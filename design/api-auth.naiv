@@ -1,0 +1,12 @@
+api post /login {
+  alias login
+  description login API for Admin and Kasir
+  body {
+    username string required
+    password string required
+  }
+  return {
+    token string required
+    user table.User required
+  } required
+}

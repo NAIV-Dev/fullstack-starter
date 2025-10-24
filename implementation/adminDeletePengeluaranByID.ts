@@ -1,0 +1,20 @@
+import { IsNull } from "typeorm";
+import { getAdminFromAuthHeader } from "../jwt";
+import { T_adminDeletePengeluaranByID } from "../types/api/adminDeletePengeluaranByID";
+import { Pengeluaran } from "../types/model/table/Pengeluaran";
+
+export const adminDeletePengeluaranByID: T_adminDeletePengeluaranByID = async req => {
+  const user = await getAdminFromAuthHeader(req.headers.authorization);
+  const pengeluaran = await Pengeluaran.findOneBy({
+    id: req.path.id,
+    deleted_at: IsNull()
+  });
+  if (!pengeluaran) {
+    return false;
+  }
+
+  pengeluaran.deleted_at = new Date();
+  await pengeluaran.save();
+
+  return true;
+}

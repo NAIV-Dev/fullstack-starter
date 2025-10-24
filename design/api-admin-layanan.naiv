@@ -1,0 +1,76 @@
+api get /admin/layanan {
+  alias adminGetLayanan
+  description list layanan
+  headers {
+    authorization string required
+  }
+  query {
+    keyword string
+    limit number
+    offset number
+    is_active boolean
+  }
+  return {
+    total number required
+    data array table.Layanan required
+  } required
+}
+
+api post /admin/layanan {
+  alias adminCreateLayanan
+  description create new layanan
+  headers {
+    authorization string required
+  }
+  body {
+    nama string required
+    label_satuan string
+    harga_satuan number required
+    deskripsi string
+    is_active boolean
+  }
+  return table.Layanan required
+}
+
+api get /admin/layanan/:id {
+  alias adminGetLayananByID
+  description get layanan detail
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return table.Layanan required
+}
+
+api put /admin/layanan/:id {
+  alias adminUpdateLayananByID
+  description update layanan detail
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  body {
+    nama string
+    label_satuan string
+    harga_satuan number
+    deskripsi string
+    is_active boolean
+  }
+  return table.Layanan required
+}
+
+api delete /admin/layanan/:id {
+  alias adminDeleteLayananByID
+  description delete layanan (soft/hard delete based on implementation)
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return boolean required
+}

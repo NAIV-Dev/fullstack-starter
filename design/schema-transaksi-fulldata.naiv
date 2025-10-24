@@ -1,0 +1,5 @@
+schema TransaksiFulldata {
+  transaksi table.Transaksi required
+  pelanggan table.Pelanggan required
+  list_item array table.TransaksiDetail required
+}

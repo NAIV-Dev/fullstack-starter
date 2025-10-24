@@ -1,0 +1,107 @@
+api get /kasir/dashboard {
+  alias kasirDashboard
+  description get kasir dashboard data
+  headers {
+    authorization string required
+  }
+  return {
+    transaksi_hari_ini number required
+    total_pendapatan_hari_ini number required
+  } required
+}
+
+api get /kasir/transaksi-hari-ini {
+  alias kasirTranasksiHariIni
+  description list transaksi hari ini (kasir), masking nomor hp pelanggan (hanya menampilkan tiga digit awal dan akhir)
+  headers {
+    authorization string required
+  }
+  return array schema.TransaksiFulldata required
+}
+
+api post /kasir/transaksi-hari-ini {
+  alias kasirCreateTransaksi
+  description create transaksi baru (kasir) hari ini, nomor transaksi buat dengan patter TRX/YYYYMMDD/<ID record Transaksi>, update nomor transaksi setelah insert
+  headers {
+    authorization string required
+  }
+  body {
+    pelanggan_id number required
+    tanggal_transaksi string required
+    sudah_lunas boolean
+    sudah_diambil boolean
+    total_harga number required
+    metode_pembayaran string required
+    catatan string
+    items array {
+      layanan_id number required
+      jumlah number required
+    } required
+  }
+  return table.Transaksi required
+}
+
+api get /kasir/transaksi-hari-ini/:id {
+  alias kasirGetTransaksiByID
+  description get transaksi detail kasir hari ini, masking nomor hp pelanggan (hanya menampilkan tiga digit awal dan akhir)
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return schema.TransaksiFulldata required
+}
+
+api put /kasir/transaksi-hari-ini/:id {
+  alias kasirUpdateTransaksiByID
+  description update transaksi kasir hari ini
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  body {
+    pelanggan_id number required
+    tanggal_transaksi string
+    sudah_lunas boolean
+    sudah_diambil boolean
+    metode_pembayaran string
+    total_harga number
+    catatan string
+    items array {
+      id number
+      layanan_id number required
+      jumlah number required
+    }
+  }
+  return table.Transaksi required
+}
+
+api delete /kasir/transaksi-hari-ini/:id {
+  alias kasirDeleteTransaksiByID
+  description delete transaksi hari ini by kasir
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return boolean required
+}
+
+schema ItemDataKasirTotalHariIni {
+  nama_layanan string required
+  label_satuan string required
+  jumlah number
+}
+
+api get /kasir/total-hari-ini {
+  alias kasirGetTotalTransaksiHariIni
+  description data_item_transaksi berisi seluruh item transaksi dengan label satuan yang sama diakumulasikan
+  headers {
+    authorization string required
+  }
+  return array schema.ItemDataKasirTotalHariIni required
+}

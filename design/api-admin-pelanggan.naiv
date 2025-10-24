@@ -1,0 +1,71 @@
+api get /admin/pelanggan {
+  alias adminGetPelanggan
+  description list pelanggan, masking nomor hp pelanggan (hanya menampilkan tiga digit awal dan akhir)
+  headers {
+    authorization string required
+  }
+  query {
+    keyword string
+    limit number
+    offset number
+  }
+  return {
+    total number required
+    data array table.Pelanggan required
+  } required
+}
+
+api post /admin/pelanggan {
+  alias adminCreatePelanggan
+  description create new pelanggan
+  headers {
+    authorization string required
+  }
+  body {
+    nama string required
+    nomor_hp string
+    alamat string
+  }
+  return table.Pelanggan required
+}
+
+api get /admin/pelanggan/:id {
+  alias adminGetPelangganByID
+  description get pelanggan detail
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return table.Pelanggan required
+}
+
+api put /admin/pelanggan/:id {
+  alias adminUpdatePelangganByID
+  description update pelanggan detail
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  body {
+    nama string
+    nomor_hp string
+    alamat string
+  }
+  return table.Pelanggan required
+}
+
+api delete /admin/pelanggan/:id {
+  alias adminDeletePelangganByID
+  description delete pelanggan (soft/hard delete based on implementation)
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return boolean required
+}

@@ -1,0 +1,73 @@
+api get /admin/pengeluaran {
+  alias adminGetPengeluaran
+  description list pengeluaran (admin)
+  headers {
+    authorization string required
+  }
+  query {
+    keyword string
+    limit number
+    offset number
+    tanggal_from string
+    tanggal_to string
+  }
+  return {
+    total number required
+    data array table.Pengeluaran required
+  } required
+}
+
+api post /admin/pengeluaran {
+  alias adminCreatePengeluaran
+  description create pengeluaran baru (admin), nomor pengeluaran buat dengan pattern PUR/YYYYMMDD/<ID record pengeluaran>, update nomor pengeluaran setelah insert
+  headers {
+    authorization string required
+  }
+  body {
+    tanggal string required
+    deskripsi string required
+    jumlah number required
+  }
+  return table.Pengeluaran required
+}
+
+api get /admin/pengeluaran/:id {
+  alias adminGetPengeluaranByID
+  description get pengeluaran detail (admin)
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return table.Pengeluaran required
+}
+
+api put /admin/pengeluaran/:id {
+  alias adminUpdatePengeluaranByID
+  description update pengeluaran (admin)
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  body {
+    tanggal string
+    deskripsi string
+    jumlah number
+  }
+  return table.Pengeluaran required
+}
+
+api delete /admin/pengeluaran/:id {
+  alias adminDeletePengeluaranByID
+  description delete pengeluaran (admin)
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return boolean required
+}

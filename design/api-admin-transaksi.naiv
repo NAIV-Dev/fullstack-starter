@@ -1,0 +1,95 @@
+api get /admin/transaksi {
+  alias adminGetTransaksi
+  description list transaksi penjualan
+  headers {
+    authorization string required
+  }
+  query {
+    keyword string
+    limit number
+    offset number
+    tanggal_from string
+    tanggal_to string
+    sudah_lunas boolean
+    sudah_diambil boolean
+    metode_pembayaran string
+  }
+  return {
+    total number required
+    data array schema.TransaksiFulldata required
+  } required
+}
+
+api post /admin/transaksi {
+  alias adminCreateTransaksi
+  description create transaksi penjualan baru, nomor transaksi buat dengan patter TRX/YYYYMMDD/<ID record Transaksi>, update nomor transaksi setelah insert
+  headers {
+    authorization string required
+  }
+  body {
+    pengguna_id number required
+    pelanggan_id number required
+    tanggal_transaksi string required
+    metode_pembayaran string required
+    sudah_lunas boolean
+    sudah_diambil boolean
+    total_harga number required
+    catatan string
+    items array {
+      layanan_id number required
+      jumlah number required
+    } required
+  }
+  return table.Transaksi required
+}
+
+api get /admin/transaksi/:id {
+  alias adminGetTransaksiByID
+  description get transaksi detail (admin)
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return schema.TransaksiFulldata required
+}
+
+api put /admin/transaksi/:id {
+  alias adminUpdateTransaksiByID
+  description update transaksi (admin)
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  body {
+    pengguna_id number
+    pelanggan_id number required
+    tanggal_transaksi string
+    metode_pembayaran string
+    sudah_lunas boolean
+    sudah_diambil boolean
+    total_harga number
+    catatan string
+    items array {
+      id number
+      layanan_id number required
+      jumlah number required
+    }
+  }
+  return table.Transaksi required
+}
+
+api delete /admin/transaksi/:id {
+  alias adminDeleteTransaksiByID
+  description delete transaksi penjualan (admin)
+  headers {
+    authorization string required
+  }
+  path {
+    id number required
+  }
+  return boolean required
+}

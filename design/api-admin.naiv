@@ -1,0 +1,49 @@
+api get /admin/dashboard {
+  alias adminDashboard
+  description get admin dashboard data
+  headers {
+    authorization string required
+  }
+  return {
+    total_kasir number required
+    total_layanan number required
+    total_transaksi number required
+    total_pendapatan number required
+    total_pengeluaran number required
+  } required
+}
+
+api get /admin/profile {
+  alias adminProfile
+  description get admin profile data
+  headers {
+    authorization string required
+  }
+  return table.User required
+}
+
+api put /admin/profile {
+  alias adminUpdateProfile
+  description update admin profile data
+  headers {
+    authorization string required
+  }
+  body {
+    nama string
+    username string
+  }
+  return table.User required
+}
+
+api put /admin/password {
+  alias adminUpdatePassword
+  description update/change admin password
+  headers {
+    authorization string required
+  }
+  body {
+    old_password string required
+    new_password string required
+  }
+  return boolean required
+}

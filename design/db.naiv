@@ -1,0 +1,76 @@
+enum UserRole {
+  Admin
+  Kasir
+}
+
+table User {
+  id bigint pk inc notnull
+  username varchar(100) notnull unique
+  password varchar(255) notnull
+  nama varchar(200) notnull
+  role enum.UserRole notnull default=Kasir
+  is_active boolean notnull default=true
+  created_at timestamp notnull default=NOW()
+  deleted_at timestamp
+}
+
+table Layanan {
+  id bigint pk inc notnull
+  nama varchar(200) notnull
+  label_satuan varchar(500)
+  harga_satuan bigint notnull
+  deskripsi text
+  is_active boolean notnull default=true
+  created_at timestamp notnull default=NOW()
+  deleted_at timestamp
+}
+
+enum MetodePembayaran {
+  QRIS
+  Tunai
+  TransferBank
+}
+
+table Transaksi {
+  id bigint pk inc notnull
+  pelanggan_id Pelanggan.id
+  nomor_transaksi varchar(50) notnull unique
+  pengguna_id User.id notnull
+  tanggal_transaksi timestamp notnull
+  sudah_lunas boolean default=false
+  sudah_diambil boolean default=false
+  total_harga bigint notnull
+  catatan text
+  metode_pembayaran enum.MetodePembayaran notnull default=Tunai
+  created_at timestamp notnull default=NOW()
+  deleted_at timestamp
+}
+
+table TransaksiDetail {
+  id bigint pk inc notnull
+  transaksi_id Transaksi.id notnull
+  layanan_id Layanan.id notnull
+  jumlah decimal(10, 4)
+  harga_satuan bigint notnull
+  subtotal bigint notnull
+}
+
+table Pengeluaran {
+  id bigint pk inc notnull
+  nomor_pengeluaran varchar(50) notnull unique
+  tanggal timestamp notnull
+  pengguna_id User.id notnull
+  deskripsi varchar(255) notnull
+  jumlah bigint notnull
+  created_at timestamp notnull default=NOW()
+  deleted_at timestamp
+}
+
+table Pelanggan {
+  id bigint pk inc notnull
+  nama varchar(200) notnull
+  nomor_hp varchar(500)
+  alamat text
+  created_at timestamp notnull default=NOW()
+  deleted_at timestamp
+}
