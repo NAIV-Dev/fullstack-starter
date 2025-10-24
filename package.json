@@ -12,7 +12,7 @@
     "build": "rm -rf dist && tsc",
     "dev": "npm run build && node dist",
     "start": "cd web && npm install && npm run build && cd .. && npm install && npm run build && node dist",
-    "jadiapp": "zip -r package.zip . -x 'node_modules/*' 'dist/*' '.git/*' 'web/node_modules/*' 'web/dist/*' 'web/.git/*'"
+    "jadiapp": "zip -r package.zip . -x 'node_modules/*' 'dist/*' '.git/*' 'web/node_modules/*' 'web/dist/*' 'web/.git/*' 'web/.env'"
   },
   "keywords": [],
   "author": "",

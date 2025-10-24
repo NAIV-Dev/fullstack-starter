@@ -7,6 +7,9 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
+import { AxiosClient } from './api-client/AxiosClient.ts'
+
+AxiosClient.BaseURL.instance.set(import.meta.env.VITE_BASE_URL ?? `${window.location.origin}/api`);
 
 // Create a new router instance
 const router = createRouter({

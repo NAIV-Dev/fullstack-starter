@@ -10,7 +10,7 @@
     "codegen": "codegen-axios-client -d ../design -o src/api-client"
   },
   "dependencies": {
-    "@naiv/codegen-axios-client": "^0.0.12",
+    "@naiv/codegen-axios-client": "^0.0.14",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-router": "^1.132.0",

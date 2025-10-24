@@ -47,7 +47,7 @@ export namespace AxiosClient {
       }
       return encodeURIComponent(String(path_param[key]));
     });
-    const url = new URL(build_path, base_url);
+    const url = new URL((base_url.endsWith('/') ? base_url : base_url + '/') + build_path.replace(/^\/+/, ''));
     return url.toString();
   }
   export class BaseURL {
