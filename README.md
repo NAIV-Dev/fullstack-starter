@@ -122,3 +122,9 @@ You can modify `index.ts` and access the ExpressJS instance from `server` variab
 const server = new Server();
 server.express?.use(...); // <-- access ExpressJS instance
 ```
+
+## Export MySQL command
+
+```bash
+mysqldump -h zero-db.naiv.dev -u <username> -P 23306 -p<password> <database_name>  --single-transaction --routines --triggers --events --skip-comments --set-charset --hex-blob --skip-lock-tables --compact --skip-ssl > dump.sql
+```
