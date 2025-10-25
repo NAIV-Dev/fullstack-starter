@@ -1,11 +1,12 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import './styles.css'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
+import {HeroUIProvider, ToastProvider} from "@heroui/react";
 
-import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 import { AxiosClient } from './api-client/AxiosClient.ts'
 
@@ -33,9 +34,10 @@ const rootElement = document.getElementById('app')
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
-    <StrictMode>
+    <HeroUIProvider>
+      <ToastProvider />
       <RouterProvider router={router} />
-    </StrictMode>,
+    </HeroUIProvider>
   )
 }
 

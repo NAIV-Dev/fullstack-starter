@@ -10,6 +10,7 @@
     "codegen": "codegen-axios-client -d ../design -o src/api-client"
   },
   "dependencies": {
+    "@heroui/react": "^2.8.5",
     "@naiv/codegen-axios-client": "^0.0.14",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.7.0",
@@ -17,6 +18,7 @@
     "@tanstack/react-router-devtools": "^1.132.0",
     "@tanstack/router-plugin": "^1.132.0",
     "axios": "^1.12.2",
+    "framer-motion": "^12.23.24",
     "lucide-react": "^0.545.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
