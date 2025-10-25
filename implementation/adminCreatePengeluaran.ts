@@ -7,6 +7,7 @@ export const adminCreatePengeluaran: T_adminCreatePengeluaran = async req => {
   const admin = await getAdminFromAuthHeader(req.headers.authorization);
   const pengeluaran = new Pengeluaran();
   pengeluaran.nomor_pengeluaran = '';
+  pengeluaran.id_jenis_pengeluaran = req.body.id_jenis_pengeluaran;
   pengeluaran.tanggal = moment(req.body.tanggal).toDate();
   pengeluaran.pengguna_id = admin.id;
   pengeluaran.deskripsi = req.body.deskripsi || '';

@@ -26,7 +26,12 @@ api post /kasir/transaksi-hari-ini {
     authorization string required
   }
   body {
-    pelanggan_id number required
+    pelanggan_id number
+    pelanggan_baru {
+      nama string
+      nomor_hp string
+      alamat string
+    }
     tanggal_transaksi string required
     sudah_lunas boolean
     sudah_diambil boolean
@@ -63,7 +68,12 @@ api put /kasir/transaksi-hari-ini/:id {
     id number required
   }
   body {
-    pelanggan_id number required
+    pelanggan_id number
+    pelanggan_baru {
+      nama string
+      nomor_hp string
+      alamat string
+    }
     tanggal_transaksi string
     sudah_lunas boolean
     sudah_diambil boolean
@@ -104,4 +114,39 @@ api get /kasir/total-hari-ini {
     authorization string required
   }
   return array schema.ItemDataKasirTotalHariIni required
+}
+
+api get /kasir/layanan {
+  alias kasirGetLayanan
+  description list layanan
+  headers {
+    authorization string required
+  }
+  query {
+    keyword string
+    limit number
+    offset number
+    is_active boolean
+  }
+  return {
+    total number required
+    data array table.Layanan required
+  } required
+}
+
+api get /kasir/pelanggan {
+  alias kasirGetPelanggan
+  description list pelanggan, masking nomor hp pelanggan (hanya menampilkan tiga digit awal dan akhir)
+  headers {
+    authorization string required
+  }
+  query {
+    keyword string
+    limit number
+    offset number
+  }
+  return {
+    total number required
+    data array table.Pelanggan required
+  } required
 }

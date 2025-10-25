@@ -9,6 +9,7 @@ const config: DataSourceOptions = {
   password: process.env.DB_PASSWORD || 'secretpassword',
   database: process.env.DB_NAME || 'mydb',
   synchronize: false,
+  timezone: 'Asia/Jakarta',
   logging: false,
   migrations: [
     __dirname + '/migration/**.ts'

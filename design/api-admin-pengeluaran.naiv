@@ -24,8 +24,9 @@ api post /admin/pengeluaran {
     authorization string required
   }
   body {
+    id_jenis_pengeluaran number required
     tanggal string required
-    deskripsi string required
+    deskripsi string
     jumlah number required
   }
   return table.Pengeluaran required
@@ -53,6 +54,7 @@ api put /admin/pengeluaran/:id {
     id number required
   }
   body {
+    id_jenis_pengeluaran number
     tanggal string
     deskripsi string
     jumlah number

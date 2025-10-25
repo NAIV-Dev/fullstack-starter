@@ -8,11 +8,15 @@ export interface T_adminGetTransaksi_query {
   keyword?: string
   limit?: number
   offset?: number
-  tanggal_from?: string
-  tanggal_to?: string
   sudah_lunas?: boolean
   sudah_diambil?: boolean
   metode_pembayaran?: string
+  filter_tanggal_from?: string
+  filter_tanggal_to?: string
+  filter_pelanggan_id?: number
+  filter_metode_pembayaran?: string
+  filter_sudah_lunas?: boolean
+  filter_sudah_diambil?: boolean
 }
 interface ReturnType_0 {
   total: number

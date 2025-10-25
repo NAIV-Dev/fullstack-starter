@@ -14,7 +14,18 @@ export class T_kasirUpdateTransaksiByID_path {
   @IsNumber({}, { message: 'id must be a number (decimal)' })
   id!: number
 }
-class T_kasirUpdateTransaksiByID_body_7 {
+class T_kasirUpdateTransaksiByID_body_1 {
+  @IsOptional()
+  @IsString({ message: 'nama must be a string' })
+  nama?: string
+  @IsOptional()
+  @IsString({ message: 'nomor_hp must be a string' })
+  nomor_hp?: string
+  @IsOptional()
+  @IsString({ message: 'alamat must be a string' })
+  alamat?: string
+}
+class T_kasirUpdateTransaksiByID_body_8 {
   @IsOptional()
   @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
   @IsNumber({}, { message: 'id must be a number (decimal)' })
@@ -29,10 +40,15 @@ class T_kasirUpdateTransaksiByID_body_7 {
   jumlah!: number
 }
 export class T_kasirUpdateTransaksiByID_body {
-  @IsNotEmpty({ message: 'pelanggan_id cannot be empty' })
+  @IsOptional()
   @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
   @IsNumber({}, { message: 'pelanggan_id must be a number (decimal)' })
-  pelanggan_id!: number
+  pelanggan_id?: number
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => T_kasirUpdateTransaksiByID_body_1)
+  pelanggan_baru?: T_kasirUpdateTransaksiByID_body_1
   @IsOptional()
   @IsString({ message: 'tanggal_transaksi must be a string' })
   tanggal_transaksi?: string
@@ -57,8 +73,8 @@ export class T_kasirUpdateTransaksiByID_body {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => T_kasirUpdateTransaksiByID_body_7)
-  items?: T_kasirUpdateTransaksiByID_body_7[]
+  @Type(() => T_kasirUpdateTransaksiByID_body_8)
+  items?: T_kasirUpdateTransaksiByID_body_8[]
 }
 
 export type T_kasirUpdateTransaksiByID = (request: {

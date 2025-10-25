@@ -20,6 +20,6 @@ export const kasirGetTotalTransaksiHariIni: T_kasirGetTotalTransaksiHariIni = as
   return list_layanan.map(layanan => ({
     nama_layanan: layanan.nama,
     label_satuan: layanan.label_satuan || '',
-    jumlah: (group_by_layanan_id[layanan.id] ?? []).reduce((acc: number, td: TransaksiDetail) => +acc + +td.subtotal, 0)
+    jumlah: (group_by_layanan_id[layanan.id] ?? []).reduce((acc: number, td: TransaksiDetail) => +acc + +(td.jumlah ?? 0), 0)
   }));
 }

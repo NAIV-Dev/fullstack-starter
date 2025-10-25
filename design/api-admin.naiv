@@ -1,16 +1,22 @@
+schema AdminDashboardData {
+  total_kasir number required
+  total_layanan number required
+  total_transaksi number required
+  total_pendapatan number required
+  total_keuntungan number required
+  total_pengeluaran number required
+  total_belum_ambil number required
+  total_belum_bayar number required
+  data_hari_ini array schema.ItemDataKasirTotalHariIni required
+}
+
 api get /admin/dashboard {
   alias adminDashboard
   description get admin dashboard data
   headers {
     authorization string required
   }
-  return {
-    total_kasir number required
-    total_layanan number required
-    total_transaksi number required
-    total_pendapatan number required
-    total_pengeluaran number required
-  } required
+  return schema.AdminDashboardData required
 }
 
 api get /admin/profile {

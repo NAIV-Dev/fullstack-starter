@@ -21,12 +21,6 @@ export class T_adminGetTransaksi_query {
   @IsNumber({}, { message: 'offset must be a number (decimal)' })
   offset?: number
   @IsOptional()
-  @IsString({ message: 'tanggal_from must be a string' })
-  tanggal_from?: string
-  @IsOptional()
-  @IsString({ message: 'tanggal_to must be a string' })
-  tanggal_to?: string
-  @IsOptional()
   @Transform((param?: any): boolean | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : (param?.value === 'true' || ((typeof param?.value === 'boolean') && param?.value)))
   @IsBoolean({ message: 'sudah_lunas must be a boolean' })
   sudah_lunas?: boolean
@@ -37,6 +31,27 @@ export class T_adminGetTransaksi_query {
   @IsOptional()
   @IsString({ message: 'metode_pembayaran must be a string' })
   metode_pembayaran?: string
+  @IsOptional()
+  @IsString({ message: 'filter_tanggal_from must be a string' })
+  filter_tanggal_from?: string
+  @IsOptional()
+  @IsString({ message: 'filter_tanggal_to must be a string' })
+  filter_tanggal_to?: string
+  @IsOptional()
+  @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
+  @IsNumber({}, { message: 'filter_pelanggan_id must be a number (decimal)' })
+  filter_pelanggan_id?: number
+  @IsOptional()
+  @IsString({ message: 'filter_metode_pembayaran must be a string' })
+  filter_metode_pembayaran?: string
+  @IsOptional()
+  @Transform((param?: any): boolean | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : (param?.value === 'true' || ((typeof param?.value === 'boolean') && param?.value)))
+  @IsBoolean({ message: 'filter_sudah_lunas must be a boolean' })
+  filter_sudah_lunas?: boolean
+  @IsOptional()
+  @Transform((param?: any): boolean | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : (param?.value === 'true' || ((typeof param?.value === 'boolean') && param?.value)))
+  @IsBoolean({ message: 'filter_sudah_diambil must be a boolean' })
+  filter_sudah_diambil?: boolean
 }
 class ReturnType_0 {
   @IsNotEmpty({ message: 'total cannot be empty' })

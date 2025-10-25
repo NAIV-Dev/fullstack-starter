@@ -4,20 +4,26 @@ import { Transaksi } from '../model/table/Transaksi'
 export interface T_adminCreateTransaksi_headers {
   authorization: string
 }
-interface T_adminCreateTransaksi_body_8 {
+interface T_adminCreateTransaksi_body_2 {
+  nama?: string
+  nomor_hp?: string
+  alamat?: string
+}
+interface T_adminCreateTransaksi_body_9 {
   layanan_id: number
   jumlah: number
 }
 export interface T_adminCreateTransaksi_body {
-  pengguna_id: number
-  pelanggan_id: number
+  pengguna_id?: number
+  pelanggan_id?: number
+  pelanggan_baru?: T_adminCreateTransaksi_body_2
   tanggal_transaksi: string
   metode_pembayaran: string
   sudah_lunas?: boolean
   sudah_diambil?: boolean
   total_harga: number
   catatan?: string
-  items: T_adminCreateTransaksi_body_8[]
+  items: T_adminCreateTransaksi_body_9[]
 }
 
 export type T_adminCreateTransaksi = (request: {

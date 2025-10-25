@@ -8,7 +8,18 @@ export class T_adminCreateTransaksi_headers {
   @IsString({ message: 'authorization must be a string' })
   authorization!: string
 }
-class T_adminCreateTransaksi_body_8 {
+class T_adminCreateTransaksi_body_2 {
+  @IsOptional()
+  @IsString({ message: 'nama must be a string' })
+  nama?: string
+  @IsOptional()
+  @IsString({ message: 'nomor_hp must be a string' })
+  nomor_hp?: string
+  @IsOptional()
+  @IsString({ message: 'alamat must be a string' })
+  alamat?: string
+}
+class T_adminCreateTransaksi_body_9 {
   @IsNotEmpty({ message: 'layanan_id cannot be empty' })
   @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
   @IsNumber({}, { message: 'layanan_id must be a number (decimal)' })
@@ -19,14 +30,19 @@ class T_adminCreateTransaksi_body_8 {
   jumlah!: number
 }
 export class T_adminCreateTransaksi_body {
-  @IsNotEmpty({ message: 'pengguna_id cannot be empty' })
+  @IsOptional()
   @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
   @IsNumber({}, { message: 'pengguna_id must be a number (decimal)' })
-  pengguna_id!: number
-  @IsNotEmpty({ message: 'pelanggan_id cannot be empty' })
+  pengguna_id?: number
+  @IsOptional()
   @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
   @IsNumber({}, { message: 'pelanggan_id must be a number (decimal)' })
-  pelanggan_id!: number
+  pelanggan_id?: number
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => T_adminCreateTransaksi_body_2)
+  pelanggan_baru?: T_adminCreateTransaksi_body_2
   @IsNotEmpty({ message: 'tanggal_transaksi cannot be empty' })
   @IsString({ message: 'tanggal_transaksi must be a string' })
   tanggal_transaksi!: string
@@ -51,8 +67,8 @@ export class T_adminCreateTransaksi_body {
   @IsNotEmpty({ message: 'items cannot be empty' })
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => T_adminCreateTransaksi_body_8)
-  items!: T_adminCreateTransaksi_body_8[]
+  @Type(() => T_adminCreateTransaksi_body_9)
+  items!: T_adminCreateTransaksi_body_9[]
 }
 
 export type T_adminCreateTransaksi = (request: {

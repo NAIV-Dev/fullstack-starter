@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import logo from '../logo.svg'
 import { useEffect, useState } from 'react'
 import { AxiosClient } from '@/api-client/AxiosClient';
@@ -7,6 +7,17 @@ import { UserSession } from '@/user-session';
 import { UserRole } from '@/api-client/model/enum/UserRole';
 
 export const Route = createFileRoute('/')({
+  async loader(context) {
+    const user = UserSession.getUser();
+    if (user) {
+      switch (user.role) {
+        case UserRole.Admin:
+          throw redirect({ to: '/admin' });
+        case UserRole.Kasir:
+          throw redirect({ to: '/kasir' });
+      }
+    }
+  },
   component() {
     const [loading, setLoading] = useState<boolean>(false);
     const [username, setUsername] = useState<string>('');

@@ -22,14 +22,29 @@ export function HeaderMobileMenu(props: HeaderMobileMenuProps) {
       </div>
       { user.role === UserRole.Admin && <>
         <a
-          href="/dashboard"
+          href="/admin"
           className="text-sky-500">
           Dashboard
         </a>
         <a
-          href="/transaction"
+          href="/admin/transaksi"
           className="text-sky-500">
-          Transaction
+          Transaksi
+        </a>
+        <a
+          href="/admin/pengeluaran"
+          className="text-sky-500">
+          Pengeluaran
+        </a>
+        <a
+          href="/admin/layanan"
+          className="text-sky-500">
+          Layanan
+        </a>
+        <a
+          href="/admin/pelanggan"
+          className="text-sky-500">
+          Pelanggan
         </a>
         <a
           href="/admin/kasir"

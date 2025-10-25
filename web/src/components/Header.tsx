@@ -24,7 +24,7 @@ export function Header(props: HeaderProps) {
   return (
     <div
       {...props}
-      className={`flex items-center justify-between p-3 px-4 transition transition-all bg-[#00000005] ${props.className || ''}`}>
+      className={`flex items-center justify-between p-3 px-4 transition transition-all bg-[#FAFAFA] ${props.className || ''}`}>
       <div className="flex items-center gap-3">
         <a href="/" className="flex items-center gap-3">
           <div className="text-2xl font-semibold">

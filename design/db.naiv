@@ -55,11 +55,20 @@ table TransaksiDetail {
   subtotal bigint notnull
 }
 
+table JenisPengeluaran {
+  id bigint pk inc notnull
+  label varchar(500) notnull
+  deskripsi text
+  created_at timestamp notnull default=NOW()
+  deleted_at timestamp
+}
+
 table Pengeluaran {
   id bigint pk inc notnull
+  pengguna_id User.id notnull
+  id_jenis_pengeluaran JenisPengeluaran.id
   nomor_pengeluaran varchar(50) notnull unique
   tanggal timestamp notnull
-  pengguna_id User.id notnull
   deskripsi varchar(255) notnull
   jumlah bigint notnull
   created_at timestamp notnull default=NOW()

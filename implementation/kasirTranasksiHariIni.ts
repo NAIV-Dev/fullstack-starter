@@ -4,6 +4,7 @@ import { T_kasirTranasksiHariIni } from "../types/api/kasirTranasksiHariIni";
 import { Transaksi } from "../types/model/table/Transaksi";
 import { TransaksiDetail } from "../types/model/table/TransaksiDetail";
 import moment from "moment";
+import { maskThree } from "../utility";
 
 export const kasirTranasksiHariIni: T_kasirTranasksiHariIni = async req => {
   const kasir = await getKasirFromAuthHeader(req.headers.authorization);
@@ -15,6 +16,8 @@ export const kasirTranasksiHariIni: T_kasirTranasksiHariIni = async req => {
     },
     relations: ['otm_pelanggan_id']
   });
+
+  data.forEach(d => d.otm_pelanggan_id!.nomor_hp = maskThree(d.otm_pelanggan_id!.nomor_hp ?? ''));
   
   const list_items = await TransaksiDetail.findBy({ transaksi_id: In(data.map(x => x.id)) });
   return data.map(trx => ({

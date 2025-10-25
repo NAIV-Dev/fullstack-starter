@@ -6,15 +6,16 @@ import moment from "moment";
 
 export const adminUpdatePengeluaranByID: T_adminUpdatePengeluaranByID = async req => {
   const admin = await getAdminFromAuthHeader(req.headers.authorization);
-  const layanan = await Pengeluaran.findOneBy({
+  const pengeluaran = await Pengeluaran.findOneBy({
     id: req.path.id,
     deleted_at: IsNull()
   });
-  if (!layanan) {
+  if (!pengeluaran) {
     throw new Error(`data not found`);
   }
-  layanan.deskripsi = req.body.deskripsi ?? layanan.deskripsi;
-  layanan.jumlah = req.body.jumlah ?? layanan.jumlah;
-  layanan.tanggal = req.body.tanggal ? moment(req.body.tanggal).toDate() : layanan.tanggal;
-  return layanan.save();
+  pengeluaran.deskripsi = req.body.deskripsi ?? pengeluaran.deskripsi;
+  pengeluaran.jumlah = req.body.jumlah ?? pengeluaran.jumlah;
+  pengeluaran.id_jenis_pengeluaran = req.body.id_jenis_pengeluaran ?? pengeluaran.id_jenis_pengeluaran!;
+  pengeluaran.tanggal = req.body.tanggal ? moment(req.body.tanggal).toDate() : pengeluaran.tanggal;
+  return pengeluaran.save();
 }

@@ -8,11 +8,15 @@ api get /admin/transaksi {
     keyword string
     limit number
     offset number
-    tanggal_from string
-    tanggal_to string
     sudah_lunas boolean
     sudah_diambil boolean
     metode_pembayaran string
+    filter_tanggal_from string
+    filter_tanggal_to string
+    filter_pelanggan_id number
+    filter_metode_pembayaran string
+    filter_sudah_lunas boolean
+    filter_sudah_diambil boolean
   }
   return {
     total number required
@@ -27,8 +31,13 @@ api post /admin/transaksi {
     authorization string required
   }
   body {
-    pengguna_id number required
-    pelanggan_id number required
+    pengguna_id number
+    pelanggan_id number
+    pelanggan_baru {
+      nama string
+      nomor_hp string
+      alamat string
+    }
     tanggal_transaksi string required
     metode_pembayaran string required
     sudah_lunas boolean
@@ -66,7 +75,12 @@ api put /admin/transaksi/:id {
   }
   body {
     pengguna_id number
-    pelanggan_id number required
+    pelanggan_id number
+    pelanggan_baru {
+      nama string
+      nomor_hp string
+      alamat string
+    }
     tanggal_transaksi string
     metode_pembayaran string
     sudah_lunas boolean

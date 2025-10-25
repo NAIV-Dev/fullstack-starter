@@ -9,12 +9,16 @@ export class T_adminCreatePengeluaran_headers {
   authorization!: string
 }
 export class T_adminCreatePengeluaran_body {
+  @IsNotEmpty({ message: 'id_jenis_pengeluaran cannot be empty' })
+  @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
+  @IsNumber({}, { message: 'id_jenis_pengeluaran must be a number (decimal)' })
+  id_jenis_pengeluaran!: number
   @IsNotEmpty({ message: 'tanggal cannot be empty' })
   @IsString({ message: 'tanggal must be a string' })
   tanggal!: string
-  @IsNotEmpty({ message: 'deskripsi cannot be empty' })
+  @IsOptional()
   @IsString({ message: 'deskripsi must be a string' })
-  deskripsi!: string
+  deskripsi?: string
   @IsNotEmpty({ message: 'jumlah cannot be empty' })
   @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
   @IsNumber({}, { message: 'jumlah must be a number (decimal)' })

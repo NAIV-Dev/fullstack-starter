@@ -6,19 +6,39 @@ import moment from "moment";
 import { MetodePembayaran } from "../types/model/enum/MetodePembayaran";
 import { Layanan } from "../types/model/table/Layanan";
 import { TransaksiDetail } from "../types/model/table/TransaksiDetail";
+import { Pelanggan } from "../types/model/table/Pelanggan";
 
 export const kasirUpdateTransaksiByID: T_kasirUpdateTransaksiByID = async req => {
-  const admin = await getKasirFromAuthHeader(req.headers.authorization);
+  const kasir = await getKasirFromAuthHeader(req.headers.authorization);
   const trx = await Transaksi.findOneBy({
     id: req.path.id,
+    pengguna_id: kasir.id,
     deleted_at: IsNull()
   });
   if (!trx) {
     throw new Error(`data not found`);
   }
+
+  if (req.body.pelanggan_baru) {
+    let pelanggan = await Pelanggan.findOneBy({
+      nama: req.body.pelanggan_baru.nama ?? '',
+      nomor_hp: req.body.pelanggan_baru.nomor_hp ?? '',
+      alamat: req.body.pelanggan_baru.alamat ?? '',
+    });
+    if (!pelanggan) {
+      pelanggan = new Pelanggan();
+      pelanggan.nama = req.body.pelanggan_baru.nama ?? '';
+      pelanggan.nomor_hp = req.body.pelanggan_baru.nomor_hp ?? '';
+      pelanggan.alamat = req.body.pelanggan_baru.alamat ?? '';
+      await pelanggan.save();
+    }
+    trx.pelanggan_id = pelanggan.id;
+  } else {
+    if (req.body.pelanggan_id) {
+      trx.pelanggan_id = req.body.pelanggan_id;
+    }
+  }
   
-  trx.pelanggan_id = req.body.pelanggan_id;
-  trx.nomor_transaksi = '';
   trx.tanggal_transaksi = req.body.tanggal_transaksi ? moment(req.body.tanggal_transaksi).toDate() : trx.tanggal_transaksi;
   trx.sudah_diambil = req.body.sudah_diambil || false;
   trx.sudah_lunas = req.body.sudah_lunas || false;

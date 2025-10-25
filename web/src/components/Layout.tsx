@@ -8,7 +8,7 @@ export function Layout(props: LayoutProps) {
     <div
       {...props}
       className={`flex flex-col min-h-[100dvh]`}>
-      <div className="sticky top-0 z-[999]">
+      <div className="sticky top-0 z-[12]">
         <Header />
       </div>
       <div className={`

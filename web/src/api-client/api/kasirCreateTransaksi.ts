@@ -4,19 +4,25 @@ import { Transaksi } from '../model/table/Transaksi'
 export interface T_kasirCreateTransaksi_headers {
   authorization: string
 }
-interface T_kasirCreateTransaksi_body_7 {
+interface T_kasirCreateTransaksi_body_1 {
+  nama?: string
+  nomor_hp?: string
+  alamat?: string
+}
+interface T_kasirCreateTransaksi_body_8 {
   layanan_id: number
   jumlah: number
 }
 export interface T_kasirCreateTransaksi_body {
-  pelanggan_id: number
+  pelanggan_id?: number
+  pelanggan_baru?: T_kasirCreateTransaksi_body_1
   tanggal_transaksi: string
   sudah_lunas?: boolean
   sudah_diambil?: boolean
   total_harga: number
   metode_pembayaran: string
   catatan?: string
-  items: T_kasirCreateTransaksi_body_7[]
+  items: T_kasirCreateTransaksi_body_8[]
 }
 
 export type T_kasirCreateTransaksi = (request: {

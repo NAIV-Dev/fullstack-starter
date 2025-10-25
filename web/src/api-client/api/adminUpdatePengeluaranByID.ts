@@ -8,6 +8,7 @@ export interface T_adminUpdatePengeluaranByID_path {
   id: number
 }
 export interface T_adminUpdatePengeluaranByID_body {
+  id_jenis_pengeluaran?: number
   tanggal?: string
   deskripsi?: string
   jumlah?: number

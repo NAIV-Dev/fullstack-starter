@@ -8,6 +8,9 @@ import { cwd } from 'process';
 
 const server = new Server();
 server.express?.use('/', Express.static(path.join(cwd(), './web/dist')));
+server.express?.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(cwd(), './web/dist/index.html'));
+});
 server.run({
   port: +(process.env.PORT ?? 9415),
   types_path: path.resolve(__dirname, 'types'),

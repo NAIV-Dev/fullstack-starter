@@ -7,21 +7,27 @@ export interface T_adminUpdateTransaksiByID_headers {
 export interface T_adminUpdateTransaksiByID_path {
   id: number
 }
-interface T_adminUpdateTransaksiByID_body_8 {
+interface T_adminUpdateTransaksiByID_body_2 {
+  nama?: string
+  nomor_hp?: string
+  alamat?: string
+}
+interface T_adminUpdateTransaksiByID_body_9 {
   id?: number
   layanan_id: number
   jumlah: number
 }
 export interface T_adminUpdateTransaksiByID_body {
   pengguna_id?: number
-  pelanggan_id: number
+  pelanggan_id?: number
+  pelanggan_baru?: T_adminUpdateTransaksiByID_body_2
   tanggal_transaksi?: string
   metode_pembayaran?: string
   sudah_lunas?: boolean
   sudah_diambil?: boolean
   total_harga?: number
   catatan?: string
-  items?: T_adminUpdateTransaksiByID_body_8[]
+  items?: T_adminUpdateTransaksiByID_body_9[]
 }
 
 export type T_adminUpdateTransaksiByID = (request: {

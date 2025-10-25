@@ -16,6 +16,10 @@ export class T_adminUpdatePengeluaranByID_path {
 }
 export class T_adminUpdatePengeluaranByID_body {
   @IsOptional()
+  @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
+  @IsNumber({}, { message: 'id_jenis_pengeluaran must be a number (decimal)' })
+  id_jenis_pengeluaran?: number
+  @IsOptional()
   @IsString({ message: 'tanggal must be a string' })
   tanggal?: string
   @IsOptional()

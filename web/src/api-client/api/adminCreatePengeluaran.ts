@@ -5,8 +5,9 @@ export interface T_adminCreatePengeluaran_headers {
   authorization: string
 }
 export interface T_adminCreatePengeluaran_body {
+  id_jenis_pengeluaran: number
   tanggal: string
-  deskripsi: string
+  deskripsi?: string
   jumlah: number
 }
 

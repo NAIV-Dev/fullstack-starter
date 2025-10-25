@@ -1,4 +1,9 @@
 import axios from 'axios';
+import { T_adminGetJenisPengeluaran } from "./api/adminGetJenisPengeluaran";
+import { T_adminCreateJenisPengeluaran } from "./api/adminCreateJenisPengeluaran";
+import { T_adminGetJenisPengeluaranByID } from "./api/adminGetJenisPengeluaranByID";
+import { T_adminUpdateJenisPengeluaranByID } from "./api/adminUpdateJenisPengeluaranByID";
+import { T_adminDeleteJenisPengeluaranByID } from "./api/adminDeleteJenisPengeluaranByID";
 import { T_adminGetKasir } from "./api/adminGetKasir";
 import { T_adminCreateKasir } from "./api/adminCreateKasir";
 import { T_adminGetKasirByID } from "./api/adminGetKasirByID";
@@ -37,6 +42,8 @@ import { T_kasirGetTransaksiByID } from "./api/kasirGetTransaksiByID";
 import { T_kasirUpdateTransaksiByID } from "./api/kasirUpdateTransaksiByID";
 import { T_kasirDeleteTransaksiByID } from "./api/kasirDeleteTransaksiByID";
 import { T_kasirGetTotalTransaksiHariIni } from "./api/kasirGetTotalTransaksiHariIni";
+import { T_kasirGetLayanan } from "./api/kasirGetLayanan";
+import { T_kasirGetPelanggan } from "./api/kasirGetPelanggan";
 
 export namespace AxiosClient {
 
@@ -65,6 +72,26 @@ export namespace AxiosClient {
     }
   }
 
+  export const adminGetJenisPengeluaran: T_adminGetJenisPengeluaran = async (req, base_url: string = BaseURL.instance.base_url) => {
+    const final_url = __build_path(base_url, '/admin/jenis-pengeluaran', {});
+    return (await axios['get'](final_url, { headers: req.headers as any, params: req.query as any, })).data as any;
+  }
+  export const adminCreateJenisPengeluaran: T_adminCreateJenisPengeluaran = async (req, base_url: string = BaseURL.instance.base_url) => {
+    const final_url = __build_path(base_url, '/admin/jenis-pengeluaran', {});
+    return (await axios['post'](final_url, req.body, { headers: req.headers as any, })).data as any;
+  }
+  export const adminGetJenisPengeluaranByID: T_adminGetJenisPengeluaranByID = async (req, base_url: string = BaseURL.instance.base_url) => {
+    const final_url = __build_path(base_url, '/admin/jenis-pengeluaran/:id', req.path);
+    return (await axios['get'](final_url, { headers: req.headers as any, })).data as any;
+  }
+  export const adminUpdateJenisPengeluaranByID: T_adminUpdateJenisPengeluaranByID = async (req, base_url: string = BaseURL.instance.base_url) => {
+    const final_url = __build_path(base_url, '/admin/jenis-pengeluaran/:id', req.path);
+    return (await axios['put'](final_url, req.body, { headers: req.headers as any, })).data as any;
+  }
+  export const adminDeleteJenisPengeluaranByID: T_adminDeleteJenisPengeluaranByID = async (req, base_url: string = BaseURL.instance.base_url) => {
+    const final_url = __build_path(base_url, '/admin/jenis-pengeluaran/:id', req.path);
+    return (await axios['delete'](final_url, { headers: req.headers as any, })).data as any;
+  }
   export const adminGetKasir: T_adminGetKasir = async (req, base_url: string = BaseURL.instance.base_url) => {
     const final_url = __build_path(base_url, '/admin/kasir', {});
     return (await axios['get'](final_url, { headers: req.headers as any, params: req.query as any, })).data as any;
@@ -216,5 +243,13 @@ export namespace AxiosClient {
   export const kasirGetTotalTransaksiHariIni: T_kasirGetTotalTransaksiHariIni = async (req, base_url: string = BaseURL.instance.base_url) => {
     const final_url = __build_path(base_url, '/kasir/total-hari-ini', {});
     return (await axios['get'](final_url, { headers: req.headers as any, })).data as any;
+  }
+  export const kasirGetLayanan: T_kasirGetLayanan = async (req, base_url: string = BaseURL.instance.base_url) => {
+    const final_url = __build_path(base_url, '/kasir/layanan', {});
+    return (await axios['get'](final_url, { headers: req.headers as any, params: req.query as any, })).data as any;
+  }
+  export const kasirGetPelanggan: T_kasirGetPelanggan = async (req, base_url: string = BaseURL.instance.base_url) => {
+    const final_url = __build_path(base_url, '/kasir/pelanggan', {});
+    return (await axios['get'](final_url, { headers: req.headers as any, params: req.query as any, })).data as any;
   }
 }

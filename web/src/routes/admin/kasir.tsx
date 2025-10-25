@@ -2,7 +2,7 @@ import { AxiosClient } from '@/api-client/AxiosClient';
 import { User } from '@/api-client/model/table/User';
 import { Layout } from '@/components/Layout';
 import { UserSession } from '@/user-session';
-import { addToast, Button, Checkbox, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
+import { addToast, Button, Checkbox, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Select, SelectItem, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react';
 
@@ -16,17 +16,18 @@ interface ModalForm {
   nama: string
   is_active?: boolean
 }
-const limit = 2;
+const initial_limit = 10;
 export const Route = createFileRoute('/admin/kasir')({
   async loader() {
     const res = await AxiosClient.adminGetKasir({
       headers: { authorization: UserSession.getToken() },
-      query: { limit }
+      query: { limit: initial_limit }
     });
     return res;
   },
   component() {
     const [offset, setOffset] = useState<number>(0);
+    const [limit, setLimit] = useState<number>(initial_limit);
     const [data, setData] = useState<LoaderData>(Route.useLoaderData());
     const [open_modal_form, setOpenModalForm] = useState<boolean>(false);
     const [selected_item, setSelectedItem] = useState<User>();
@@ -95,7 +96,7 @@ export const Route = createFileRoute('/admin/kasir')({
 
     useEffect(() => {
       getData();
-    }, [offset]);
+    }, [offset, limit]);
 
     return (
       <Layout className='flex flex-col gap-4'>
@@ -114,6 +115,7 @@ export const Route = createFileRoute('/admin/kasir')({
           variant='bordered'
           color='primary'
           onPress={() => {
+            setSelectedItem(undefined);
             setModalForm({
               username: '',
               password: '',
@@ -173,11 +175,33 @@ export const Route = createFileRoute('/admin/kasir')({
           </TableBody>
         </Table>
 
-        {/* PAGINATION */}
-        <Pagination
-          initialPage={(offset / limit) + 1}
-          total={Math.ceil(data.total / limit)}
-          onChange={page => setOffset((page - 1) * limit)} />
+        {/* PAGINATION & LIMIT */}
+        <div className={`
+          flex flex-col gap-2
+          lg:flex-row lg:justify-between
+        `}>
+          <Pagination
+            initialPage={(offset / limit) + 1}
+            total={Math.ceil(data.total / limit)}
+            onChange={page => setOffset((page - 1) * limit)} />
+          <div className={`
+            flex items-center gap-4
+            lg:flex-row-reverse
+          `}>
+            <Select
+              className="w-30"
+              selectionMode='single'
+              selectedKeys={[String(limit)]}
+              aria-label='.'
+              onSelectionChange={val => setLimit(+(val.currentKey as any))}
+              variant="bordered">
+              {[10, 20, 50, 100, 200].map((k) => (
+                <SelectItem textValue={String(k)} key={String(k)}>{k}</SelectItem>
+              ))}
+            </Select>
+            { (loading_delete_data || loading_get_data) && <Spinner size='sm' />}
+          </div>
+        </div>
         
         {/* FORM MODAL */}
         <Modal

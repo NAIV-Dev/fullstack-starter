@@ -8,7 +8,18 @@ export class T_kasirCreateTransaksi_headers {
   @IsString({ message: 'authorization must be a string' })
   authorization!: string
 }
-class T_kasirCreateTransaksi_body_7 {
+class T_kasirCreateTransaksi_body_1 {
+  @IsOptional()
+  @IsString({ message: 'nama must be a string' })
+  nama?: string
+  @IsOptional()
+  @IsString({ message: 'nomor_hp must be a string' })
+  nomor_hp?: string
+  @IsOptional()
+  @IsString({ message: 'alamat must be a string' })
+  alamat?: string
+}
+class T_kasirCreateTransaksi_body_8 {
   @IsNotEmpty({ message: 'layanan_id cannot be empty' })
   @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
   @IsNumber({}, { message: 'layanan_id must be a number (decimal)' })
@@ -19,10 +30,15 @@ class T_kasirCreateTransaksi_body_7 {
   jumlah!: number
 }
 export class T_kasirCreateTransaksi_body {
-  @IsNotEmpty({ message: 'pelanggan_id cannot be empty' })
+  @IsOptional()
   @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
   @IsNumber({}, { message: 'pelanggan_id must be a number (decimal)' })
-  pelanggan_id!: number
+  pelanggan_id?: number
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => T_kasirCreateTransaksi_body_1)
+  pelanggan_baru?: T_kasirCreateTransaksi_body_1
   @IsNotEmpty({ message: 'tanggal_transaksi cannot be empty' })
   @IsString({ message: 'tanggal_transaksi must be a string' })
   tanggal_transaksi!: string
@@ -47,8 +63,8 @@ export class T_kasirCreateTransaksi_body {
   @IsNotEmpty({ message: 'items cannot be empty' })
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => T_kasirCreateTransaksi_body_7)
-  items!: T_kasirCreateTransaksi_body_7[]
+  @Type(() => T_kasirCreateTransaksi_body_8)
+  items!: T_kasirCreateTransaksi_body_8[]
 }
 
 export type T_kasirCreateTransaksi = (request: {

@@ -10,12 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as KasirIndexRouteImport } from './routes/kasir/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminPengeluaranRouteImport } from './routes/admin/pengeluaran'
+import { Route as AdminPelangganRouteImport } from './routes/admin/pelanggan'
+import { Route as AdminLayananRouteImport } from './routes/admin/layanan'
 import { Route as AdminKasirRouteImport } from './routes/admin/kasir'
+import { Route as AdminJenisPengeluaranRouteImport } from './routes/admin/jenis-pengeluaran'
+import { Route as AdminTransaksiIndexRouteImport } from './routes/admin/transaksi/index'
+import { Route as KasirTransaksiIdRouteImport } from './routes/kasir/transaksi/$id'
+import { Route as AdminTransaksiIdRouteImport } from './routes/admin/transaksi/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KasirIndexRoute = KasirIndexRouteImport.update({
+  id: '/kasir/',
+  path: '/kasir/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -23,40 +36,141 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPengeluaranRoute = AdminPengeluaranRouteImport.update({
+  id: '/admin/pengeluaran',
+  path: '/admin/pengeluaran',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPelangganRoute = AdminPelangganRouteImport.update({
+  id: '/admin/pelanggan',
+  path: '/admin/pelanggan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLayananRoute = AdminLayananRouteImport.update({
+  id: '/admin/layanan',
+  path: '/admin/layanan',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminKasirRoute = AdminKasirRouteImport.update({
   id: '/admin/kasir',
   path: '/admin/kasir',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminJenisPengeluaranRoute = AdminJenisPengeluaranRouteImport.update({
+  id: '/admin/jenis-pengeluaran',
+  path: '/admin/jenis-pengeluaran',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTransaksiIndexRoute = AdminTransaksiIndexRouteImport.update({
+  id: '/admin/transaksi/',
+  path: '/admin/transaksi/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KasirTransaksiIdRoute = KasirTransaksiIdRouteImport.update({
+  id: '/kasir/transaksi/$id',
+  path: '/kasir/transaksi/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTransaksiIdRoute = AdminTransaksiIdRouteImport.update({
+  id: '/admin/transaksi/$id',
+  path: '/admin/transaksi/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin/jenis-pengeluaran': typeof AdminJenisPengeluaranRoute
   '/admin/kasir': typeof AdminKasirRoute
+  '/admin/layanan': typeof AdminLayananRoute
+  '/admin/pelanggan': typeof AdminPelangganRoute
+  '/admin/pengeluaran': typeof AdminPengeluaranRoute
   '/admin': typeof AdminIndexRoute
+  '/kasir': typeof KasirIndexRoute
+  '/admin/transaksi/$id': typeof AdminTransaksiIdRoute
+  '/kasir/transaksi/$id': typeof KasirTransaksiIdRoute
+  '/admin/transaksi': typeof AdminTransaksiIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/jenis-pengeluaran': typeof AdminJenisPengeluaranRoute
   '/admin/kasir': typeof AdminKasirRoute
+  '/admin/layanan': typeof AdminLayananRoute
+  '/admin/pelanggan': typeof AdminPelangganRoute
+  '/admin/pengeluaran': typeof AdminPengeluaranRoute
   '/admin': typeof AdminIndexRoute
+  '/kasir': typeof KasirIndexRoute
+  '/admin/transaksi/$id': typeof AdminTransaksiIdRoute
+  '/kasir/transaksi/$id': typeof KasirTransaksiIdRoute
+  '/admin/transaksi': typeof AdminTransaksiIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin/jenis-pengeluaran': typeof AdminJenisPengeluaranRoute
   '/admin/kasir': typeof AdminKasirRoute
+  '/admin/layanan': typeof AdminLayananRoute
+  '/admin/pelanggan': typeof AdminPelangganRoute
+  '/admin/pengeluaran': typeof AdminPengeluaranRoute
   '/admin/': typeof AdminIndexRoute
+  '/kasir/': typeof KasirIndexRoute
+  '/admin/transaksi/$id': typeof AdminTransaksiIdRoute
+  '/kasir/transaksi/$id': typeof KasirTransaksiIdRoute
+  '/admin/transaksi/': typeof AdminTransaksiIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin/kasir' | '/admin'
+  fullPaths:
+    | '/'
+    | '/admin/jenis-pengeluaran'
+    | '/admin/kasir'
+    | '/admin/layanan'
+    | '/admin/pelanggan'
+    | '/admin/pengeluaran'
+    | '/admin'
+    | '/kasir'
+    | '/admin/transaksi/$id'
+    | '/kasir/transaksi/$id'
+    | '/admin/transaksi'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin/kasir' | '/admin'
-  id: '__root__' | '/' | '/admin/kasir' | '/admin/'
+  to:
+    | '/'
+    | '/admin/jenis-pengeluaran'
+    | '/admin/kasir'
+    | '/admin/layanan'
+    | '/admin/pelanggan'
+    | '/admin/pengeluaran'
+    | '/admin'
+    | '/kasir'
+    | '/admin/transaksi/$id'
+    | '/kasir/transaksi/$id'
+    | '/admin/transaksi'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin/jenis-pengeluaran'
+    | '/admin/kasir'
+    | '/admin/layanan'
+    | '/admin/pelanggan'
+    | '/admin/pengeluaran'
+    | '/admin/'
+    | '/kasir/'
+    | '/admin/transaksi/$id'
+    | '/kasir/transaksi/$id'
+    | '/admin/transaksi/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminJenisPengeluaranRoute: typeof AdminJenisPengeluaranRoute
   AdminKasirRoute: typeof AdminKasirRoute
+  AdminLayananRoute: typeof AdminLayananRoute
+  AdminPelangganRoute: typeof AdminPelangganRoute
+  AdminPengeluaranRoute: typeof AdminPengeluaranRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  KasirIndexRoute: typeof KasirIndexRoute
+  AdminTransaksiIdRoute: typeof AdminTransaksiIdRoute
+  KasirTransaksiIdRoute: typeof KasirTransaksiIdRoute
+  AdminTransaksiIndexRoute: typeof AdminTransaksiIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -68,11 +182,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kasir/': {
+      id: '/kasir/'
+      path: '/kasir'
+      fullPath: '/kasir'
+      preLoaderRoute: typeof KasirIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/': {
       id: '/admin/'
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/pengeluaran': {
+      id: '/admin/pengeluaran'
+      path: '/admin/pengeluaran'
+      fullPath: '/admin/pengeluaran'
+      preLoaderRoute: typeof AdminPengeluaranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/pelanggan': {
+      id: '/admin/pelanggan'
+      path: '/admin/pelanggan'
+      fullPath: '/admin/pelanggan'
+      preLoaderRoute: typeof AdminPelangganRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/layanan': {
+      id: '/admin/layanan'
+      path: '/admin/layanan'
+      fullPath: '/admin/layanan'
+      preLoaderRoute: typeof AdminLayananRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/kasir': {
@@ -82,13 +224,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminKasirRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/jenis-pengeluaran': {
+      id: '/admin/jenis-pengeluaran'
+      path: '/admin/jenis-pengeluaran'
+      fullPath: '/admin/jenis-pengeluaran'
+      preLoaderRoute: typeof AdminJenisPengeluaranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/transaksi/': {
+      id: '/admin/transaksi/'
+      path: '/admin/transaksi'
+      fullPath: '/admin/transaksi'
+      preLoaderRoute: typeof AdminTransaksiIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kasir/transaksi/$id': {
+      id: '/kasir/transaksi/$id'
+      path: '/kasir/transaksi/$id'
+      fullPath: '/kasir/transaksi/$id'
+      preLoaderRoute: typeof KasirTransaksiIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/transaksi/$id': {
+      id: '/admin/transaksi/$id'
+      path: '/admin/transaksi/$id'
+      fullPath: '/admin/transaksi/$id'
+      preLoaderRoute: typeof AdminTransaksiIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminJenisPengeluaranRoute: AdminJenisPengeluaranRoute,
   AdminKasirRoute: AdminKasirRoute,
+  AdminLayananRoute: AdminLayananRoute,
+  AdminPelangganRoute: AdminPelangganRoute,
+  AdminPengeluaranRoute: AdminPengeluaranRoute,
   AdminIndexRoute: AdminIndexRoute,
+  KasirIndexRoute: KasirIndexRoute,
+  AdminTransaksiIdRoute: AdminTransaksiIdRoute,
+  KasirTransaksiIdRoute: KasirTransaksiIdRoute,
+  AdminTransaksiIndexRoute: AdminTransaksiIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
