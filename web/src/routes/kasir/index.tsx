@@ -191,7 +191,7 @@ export const Route = createFileRoute('/kasir/')({
                       <div>
                         { moment(transaksi.transaksi.created_at).format('dddd, DD MMMM YYYY HH:mm') }
                       </div>
-                      <div className='flex items-center gap-2'>
+                      <div className='flex flex-col gap-2'>
                         <Button
                           color='default'
                           variant='bordered'
@@ -210,20 +210,22 @@ export const Route = createFileRoute('/kasir/')({
                           }}>
                           <Pencil size={14} /> Update
                         </Button>
-                        <Button
-                          color='default'
-                          variant='bordered'
-                          size='sm'
-                          className='!min-w-0'>
-                          <Printer size={14} />
-                        </Button>
-                        <Button
-                          color='default'
-                          variant='bordered'
-                          size='sm'
-                          className='!min-w-0'>
-                          <Download size={14} />
-                        </Button>
+                        <div className='flex items-center gap-2'>
+                          <Button
+                            color='default'
+                            variant='bordered'
+                            size='sm'
+                            className='!min-w-0'>
+                            <Printer size={14} />
+                          </Button>
+                          <Button
+                            color='default'
+                            variant='bordered'
+                            size='sm'
+                            className='!min-w-0'>
+                            <Download size={14} />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </TableCell>
@@ -275,13 +277,13 @@ export const Route = createFileRoute('/kasir/')({
                         as={Link}>
                         Edit
                       </Button>
-                      <Button 
+                      {/* <Button 
                         color='danger'
                         variant='bordered'
                         size='sm'
                         onPress={() => confirm('Delete item?') && deleteData(transaksi)}>
                         Delete
-                      </Button>
+                      </Button> */}
                     </div>
                   </TableCell>
                 </TableRow>

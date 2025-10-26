@@ -78,6 +78,8 @@ export const Route = createFileRoute('/admin/transaksi/')({
     const [filter_sudah_diambil, setFilterSudahDiambil] = useState<boolean>();
     const [filter_metode_pembayaran_list, setFilterMetodePembayaranList] = useState<MetodePembayaran[]>();
 
+    const total_amount_trx = data.data.reduce((acc: number, trx: TransaksiFulldata) => +acc + +trx.transaksi.total_harga, 0);
+
     async function getData() {
       try {
         setLoadingGetData(true);
@@ -423,7 +425,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
                       <div className='font-bold text-sky-500'>
                         { transaksi.transaksi.nomor_transaksi }
                       </div>
-                      <div className='flex items-center gap-2'>
+                      <div className='flex flex-col gap-2'>
                         <Button
                           color='default'
                           variant='bordered'
@@ -442,20 +444,22 @@ export const Route = createFileRoute('/admin/transaksi/')({
                           }}>
                           <Pencil size={14} /> Update
                         </Button>
-                        <Button
-                          color='default'
-                          variant='bordered'
-                          size='sm'
-                          className='!min-w-0'>
-                          <Printer size={14} />
-                        </Button>
-                        <Button
-                          color='default'
-                          variant='bordered'
-                          size='sm'
-                          className='!min-w-0'>
-                          <Download size={14} />
-                        </Button>
+                        <div className='flex items-center gap-2'>
+                          <Button
+                            color='default'
+                            variant='bordered'
+                            size='sm'
+                            className='!min-w-0'>
+                            <Printer size={14} />
+                          </Button>
+                          <Button
+                            color='default'
+                            variant='bordered'
+                            size='sm'
+                            className='!min-w-0'>
+                            <Download size={14} />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </TableCell>
@@ -520,8 +524,18 @@ export const Route = createFileRoute('/admin/transaksi/')({
                     </div>
                   </TableCell>
                 </TableRow>
-              ))
+              )) as any
             }
+            <TableRow className='bg-zinc-100'>
+              <TableCell>Menampilkan {data.data.length} transaksi</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell className='font-bold'>{ IDRFormatter.format(total_amount_trx) }</TableCell>
+              <TableCell>{''}</TableCell>
+            </TableRow>
           </TableBody>
         </Table>
 

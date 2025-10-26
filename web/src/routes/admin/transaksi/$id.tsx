@@ -4,6 +4,7 @@ import { Layanan } from '@/api-client/model/table/Layanan';
 import { Pelanggan } from '@/api-client/model/table/Pelanggan';
 import { User } from '@/api-client/model/table/User';
 import { Layout } from '@/components/Layout';
+import { TrxItemBreakdown } from '@/components/TrxItemBreakdown';
 import { UserSession } from '@/user-session';
 import { IDRFormatter } from '@/utility';
 import { addToast, Autocomplete, AutocompleteItem, Button, Input, Radio, RadioGroup, Select, SelectItem, Textarea } from '@heroui/react';
@@ -290,6 +291,16 @@ export const Route = createFileRoute('/admin/transaksi/$id')({
                 + Tambah Item
               </Button>
               <div className='mt-2 bg-amber-100 p-4 px-6 rounded-lg'>
+                <TrxItemBreakdown
+                  data={payload.items.map(item => {
+                    const l = loader_data.list_layanan.find(l => l.id == item.layanan_id);
+                    return {
+                      name: l?.nama ?? '',
+                      qty: item.jumlah,
+                      price: l?.harga_satuan ?? 0
+                    };
+                  })} />
+                <div className='bg-amber-500 w-full min-h-px my-2' />
                 <div>
                   Total
                 </div>

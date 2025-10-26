@@ -11,7 +11,10 @@ export const adminGetLayanan: T_adminGetLayanan = async req => {
       deleted_at: IsNull()
     } : { deleted_at: IsNull() },
     take: req.query.limit ?? 10,
-    skip: req.query.offset ?? 0
+    skip: req.query.offset ?? 0,
+    order: {
+      id: 'desc'
+    }
   });
   
   return { data, total };

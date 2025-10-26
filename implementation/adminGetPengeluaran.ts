@@ -16,7 +16,10 @@ export const adminGetPengeluaran: T_adminGetPengeluaran = async req => {
       deleted_at: IsNull()
     },
     take: req.query.limit ?? 10,
-    skip: req.query.offset ?? 0
+    skip: req.query.offset ?? 0,
+    order: {
+      tanggal: 'desc'
+    }
   });
   
   return { data, total };

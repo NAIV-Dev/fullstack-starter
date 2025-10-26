@@ -59,6 +59,8 @@ export const Route = createFileRoute('/admin/pengeluaran')({
     const [filter_tanggal_from, setFilterTanggalFrom] = useState<string>();
     const [filter_tanggal_to, setFilterTanggalTo] = useState<string>();
 
+    const total_amount_exp = data.data.reduce((acc: number, exp: Pengeluaran) => +acc + +exp.jumlah, 0);
+
     async function getData() {
       try {
         setLoadingGetData(true);
@@ -292,8 +294,15 @@ export const Route = createFileRoute('/admin/pengeluaran')({
                     </div>
                   </TableCell>
                 </TableRow>
-              ))
+              )) as any
             }
+            <TableRow className='bg-zinc-100'>
+              <TableCell>Menampilkan {data.data.length} pengeluaran</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell className='font-bold'>{ IDRFormatter.format(total_amount_exp) }</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell>{''}</TableCell>
+            </TableRow>
           </TableBody>
         </Table>
 

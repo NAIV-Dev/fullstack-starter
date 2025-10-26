@@ -9,12 +9,19 @@ import { maskThree } from "../utility";
 export const kasirTranasksiHariIni: T_kasirTranasksiHariIni = async req => {
   const kasir = await getKasirFromAuthHeader(req.headers.authorization);
   const [data, total] = await Transaksi.findAndCount({
-    where: {
+    where: [{
       deleted_at: IsNull(),
       pengguna_id: kasir.id,
-      created_at: Between(moment().startOf('day').toDate(), moment().endOf('day').toDate())
-    },
-    relations: ['otm_pelanggan_id']
+      sudah_lunas: false
+    }, {
+      deleted_at: IsNull(),
+      pengguna_id: kasir.id,
+      sudah_diambil: false
+    }],
+    relations: ['otm_pelanggan_id'],
+    order: {
+      id: 'desc'
+    }
   });
 
   data.forEach(d => d.otm_pelanggan_id!.nomor_hp = maskThree(d.otm_pelanggan_id!.nomor_hp ?? ''));

@@ -16,7 +16,7 @@ export const adminDashboard: T_adminDashboard = async req => {
 
   const list_transaksi_hari_ini = await Transaksi.findBy({
     deleted_at: IsNull(),
-    created_at: Between(moment().startOf('day').toDate(), moment().endOf('day').toDate())
+    tanggal_transaksi: Between(moment().startOf('day').toDate(), moment().endOf('day').toDate())
   });
   const list_items_hari_ini = await TransaksiDetail.findBy({ transaksi_id: In(list_transaksi_hari_ini.map(x => x.id)) });
   const group_by_layanan_id: _.Dictionary<TransaksiDetail[]> = _.groupBy(list_items_hari_ini, x => x.layanan_id);

@@ -47,21 +47,23 @@ export const kasirUpdateTransaksiByID: T_kasirUpdateTransaksiByID = async req =>
   trx.metode_pembayaran = req.body.metode_pembayaran as MetodePembayaran ?? trx.metode_pembayaran;
   await trx.save();
 
-  const list_layanan = await Layanan.findBy({ id: In((req.body.items ?? []).map(x => x.layanan_id)) });
-  await TransaksiDetail.delete({ transaksi_id: trx.id });
-  await TransaksiDetail.save((req.body.items ?? []).map(item => {
-    const layanan = list_layanan.find(l => l.id == item.layanan_id);
-    if (!layanan) {
-      throw new Error(`Layanan id = ${item.layanan_id} not found`);
-    }
-    const td = new TransaksiDetail();
-    td.transaksi_id = trx.id;
-    td.layanan_id = layanan.id;
-    td.jumlah = item.jumlah;
-    td.harga_satuan = layanan.harga_satuan;
-    td.subtotal = Math.round(td.jumlah * td.harga_satuan);
-    return td;
-  }));
+  if (req.body.items) {
+    const list_layanan = await Layanan.findBy({ id: In((req.body.items ?? []).map(x => x.layanan_id)) });
+    await TransaksiDetail.delete({ transaksi_id: trx.id });
+    await TransaksiDetail.save((req.body.items ?? []).map(item => {
+      const layanan = list_layanan.find(l => l.id == item.layanan_id);
+      if (!layanan) {
+        throw new Error(`Layanan id = ${item.layanan_id} not found`);
+      }
+      const td = new TransaksiDetail();
+      td.transaksi_id = trx.id;
+      td.layanan_id = layanan.id;
+      td.jumlah = item.jumlah;
+      td.harga_satuan = layanan.harga_satuan;
+      td.subtotal = Math.round(td.jumlah * td.harga_satuan);
+      return td;
+    }));
+  }
 
   return trx.save();
 }
