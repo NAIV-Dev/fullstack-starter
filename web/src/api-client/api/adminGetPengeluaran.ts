@@ -8,8 +8,9 @@ export interface T_adminGetPengeluaran_query {
   keyword?: string
   limit?: number
   offset?: number
-  tanggal_from?: string
-  tanggal_to?: string
+  filter_tanggal_from?: string
+  filter_tanggal_to?: string
+  filter_jenis_pengeluaran_id_csv?: string
 }
 interface ReturnType_0 {
   total: number

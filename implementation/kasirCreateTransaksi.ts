@@ -11,6 +11,10 @@ import { Pelanggan } from "../types/model/table/Pelanggan";
 export const kasirCreateTransaksi: T_kasirCreateTransaksi = async req => {
   const kasir = await getKasirFromAuthHeader(req.headers.authorization);
   const trx = new Transaksi();
+
+  if (req.body.items.length === 0) {
+    throw new Error(`Item transaksi harus diisi minimal satu`);
+  }
   
   if (req.body.pelanggan_baru) {
     let pelanggan = await Pelanggan.findOneBy({
@@ -19,6 +23,15 @@ export const kasirCreateTransaksi: T_kasirCreateTransaksi = async req => {
       alamat: req.body.pelanggan_baru.alamat ?? '',
     });
     if (!pelanggan) {
+      if (!req.body.pelanggan_baru.nama) {
+        throw new Error(`Nama pelanggan harus diisi.`);
+      }
+      if (!req.body.pelanggan_baru.nomor_hp) {
+        throw new Error(`Nomor HP pelanggan harus diisi.`);
+      }
+      if (!req.body.pelanggan_baru.alamat) {
+        throw new Error(`Alamat pelanggan harus diisi.`);
+      }
       pelanggan = new Pelanggan();
       pelanggan.nama = req.body.pelanggan_baru.nama ?? '';
       pelanggan.nomor_hp = req.body.pelanggan_baru.nomor_hp ?? '';

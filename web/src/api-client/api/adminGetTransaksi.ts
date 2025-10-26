@@ -14,7 +14,7 @@ export interface T_adminGetTransaksi_query {
   filter_tanggal_from?: string
   filter_tanggal_to?: string
   filter_pelanggan_id?: number
-  filter_metode_pembayaran?: string
+  filter_metode_pembayaran_csv?: string
   filter_sudah_lunas?: boolean
   filter_sudah_diambil?: boolean
 }

@@ -21,11 +21,14 @@ export class T_adminGetPengeluaran_query {
   @IsNumber({}, { message: 'offset must be a number (decimal)' })
   offset?: number
   @IsOptional()
-  @IsString({ message: 'tanggal_from must be a string' })
-  tanggal_from?: string
+  @IsString({ message: 'filter_tanggal_from must be a string' })
+  filter_tanggal_from?: string
   @IsOptional()
-  @IsString({ message: 'tanggal_to must be a string' })
-  tanggal_to?: string
+  @IsString({ message: 'filter_tanggal_to must be a string' })
+  filter_tanggal_to?: string
+  @IsOptional()
+  @IsString({ message: 'filter_jenis_pengeluaran_id_csv must be a string' })
+  filter_jenis_pengeluaran_id_csv?: string
 }
 class ReturnType_0 {
   @IsNotEmpty({ message: 'total cannot be empty' })

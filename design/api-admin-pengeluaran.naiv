@@ -8,8 +8,9 @@ api get /admin/pengeluaran {
     keyword string
     limit number
     offset number
-    tanggal_from string
-    tanggal_to string
+    filter_tanggal_from string
+    filter_tanggal_to string
+    filter_jenis_pengeluaran_id_csv string
   }
   return {
     total number required

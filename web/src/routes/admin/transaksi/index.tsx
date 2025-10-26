@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Download, Funnel, Pencil, Printer, Search, X } from 'lucide-react'
+import _ from 'lodash';
 
 interface LoaderData {
   list_pelanggan: Pelanggan[]
@@ -75,7 +76,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
     const [temp_keyword, setTempKeyword] = useState<string>('');
     const [filter_sudah_lunas, setFilterSudahLunas] = useState<boolean>();
     const [filter_sudah_diambil, setFilterSudahDiambil] = useState<boolean>();
-    const [filter_metode_pembayaran, setFilterMetodePembayaran] = useState<MetodePembayaran>();
+    const [filter_metode_pembayaran_list, setFilterMetodePembayaranList] = useState<MetodePembayaran[]>();
 
     async function getData() {
       try {
@@ -91,7 +92,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
             keyword,
             filter_sudah_diambil,
             filter_sudah_lunas,
-            filter_metode_pembayaran
+            filter_metode_pembayaran_csv: filter_metode_pembayaran_list?.join(',')
           }
         }));
       } catch (err: any) {
@@ -143,7 +144,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
 
     useEffect(() => {
       getData();
-    }, [offset, limit, filter_pelanggan_id, filter_tanggal_from, filter_tanggal_to, keyword, filter_sudah_diambil, filter_sudah_lunas, filter_metode_pembayaran]);
+    }, [offset, limit, filter_pelanggan_id, filter_tanggal_from, filter_tanggal_to, keyword, filter_sudah_diambil, filter_sudah_lunas, filter_metode_pembayaran_list]);
 
     return (
       <Layout className='flex flex-col gap-4'>
@@ -230,6 +231,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
                   </PopoverTrigger>
                   <PopoverContent className='!px-2 !py-2'>
                     <Input
+                      className='min-w-40'
                       type='date'
                       value={filter_tanggal_from || ''}
                       onChange={e => setFilterTanggalFrom(e.target.value)}
@@ -237,6 +239,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
                       label='From'
                       labelPlacement='outside-top' />
                     <Input
+                      className='min-w-40'
                       type='date'
                       value={filter_tanggal_to || ''}
                       onChange={e => setFilterTanggalTo(e.target.value)}
@@ -378,16 +381,16 @@ export const Route = createFileRoute('/admin/transaksi/')({
                       <Funnel 
                         className='cursor-pointer'
                         size={12} />
-                      { filter_metode_pembayaran && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' /> }
+                      { (filter_metode_pembayaran_list?.length ?? 0) > 0 && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' /> }
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className='!px-1'>
                     <Select
                       className="w-40"
-                      selectionMode='single'
-                      selectedKeys={[String(filter_metode_pembayaran)]}
+                      selectionMode='multiple'
+                      selectedKeys={filter_metode_pembayaran_list ?? []}
                       aria-label='.'
-                      onSelectionChange={val => setFilterMetodePembayaran(val.currentKey as any)}
+                      onSelectionChange={(val: any) => setFilterMetodePembayaranList([...val])}
                       placeholder='Pilih Metode Pembayaran'
                       variant="bordered">
                       {Object.keys(MetodePembayaran).map((mp: string) => (
@@ -396,8 +399,8 @@ export const Route = createFileRoute('/admin/transaksi/')({
                         </SelectItem>
                       ))}
                     </Select>
-                    { filter_metode_pembayaran && <div 
-                      onClick={() => setFilterMetodePembayaran(undefined)}
+                    { (filter_metode_pembayaran_list?.length ?? 0) > 0 && <div 
+                      onClick={() => setFilterMetodePembayaranList(undefined)}
                       className='flex items-center gap-[2px] self-start text-red-400 hover:text-red-600 cursor-pointer'>
                       <X size={14} className='mt-px' />
                       <div>

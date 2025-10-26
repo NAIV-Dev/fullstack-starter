@@ -3,11 +3,12 @@ import { Pengeluaran } from '@/api-client/model/table/Pengeluaran';
 import { Layout } from '@/components/Layout';
 import { UserSession } from '@/user-session';
 import { IDRFormatter } from '@/utility';
-import { addToast, Autocomplete, AutocompleteItem, Button, Checkbox, Input, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Select, SelectItem, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea } from '@heroui/react';
+import { addToast, Autocomplete, AutocompleteItem, Button, Checkbox, Input, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Pagination, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea } from '@heroui/react';
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { JenisPengeluaran } from '@/api-client/model/table/JenisPengeluaran';
+import { Funnel, X } from 'lucide-react';
 
 interface LoaderData {
   list_jenis_pengeluaran: JenisPengeluaran[]
@@ -54,13 +55,22 @@ export const Route = createFileRoute('/admin/pengeluaran')({
     const [loading_get_data, setLoadingGetData] = useState<boolean>(false);
     const [loading_submit_data, setLoadingSubmitData] = useState<boolean>(false);
     const [loading_delete_data, setLoadingDeleteData] = useState<boolean>(false);
+    const [filter_jenis_pengeluaran_id_list, setFilterJenisPengeluaranIDList] = useState<number[]>();
+    const [filter_tanggal_from, setFilterTanggalFrom] = useState<string>();
+    const [filter_tanggal_to, setFilterTanggalTo] = useState<string>();
 
     async function getData() {
       try {
         setLoadingGetData(true);
         setData(await AxiosClient.adminGetPengeluaran({
           headers: { authorization: UserSession.getToken() },
-          query: { limit, offset }
+          query: {
+            limit,
+            offset,
+            filter_jenis_pengeluaran_id_csv: filter_jenis_pengeluaran_id_list?.join(','),
+            filter_tanggal_from,
+            filter_tanggal_to
+          }
         }));
       } catch (err: any) {
         addToast({ title: "Error", color: 'danger', description: err?.response?.data?.toString() });
@@ -110,7 +120,7 @@ export const Route = createFileRoute('/admin/pengeluaran')({
 
     useEffect(() => {
       getData();
-    }, [offset, limit]);
+    }, [offset, limit, filter_tanggal_from, filter_tanggal_to, filter_jenis_pengeluaran_id_list]);
 
     return (
       <Layout className='flex flex-col gap-4'>
@@ -125,7 +135,7 @@ export const Route = createFileRoute('/admin/pengeluaran')({
 
         {/* ADD BUTTON */}
         <div className='flex items-center justify-between'>
-          <Button 
+          <Button
             className='lg:self-start'
             variant='bordered'
             color='primary'
@@ -141,7 +151,7 @@ export const Route = createFileRoute('/admin/pengeluaran')({
             }}>
             + Add Pengeluaran
           </Button>
-          <Button 
+          <Button
             href={'/admin/jenis-pengeluaran'}
             variant='light'
             color='primary'
@@ -153,8 +163,95 @@ export const Route = createFileRoute('/admin/pengeluaran')({
         {/* DATA TABLE */}
         <Table aria-label="Example static collection table">
           <TableHeader>
-            <TableColumn>Tanggal</TableColumn>
-            <TableColumn>Jenis</TableColumn>
+            <TableColumn>
+              <div className='flex items-center gap-2'>
+                <div>
+                  Tanggal
+                </div>
+                <Popover placement='bottom'>
+                  <PopoverTrigger
+                    className='outline-none'>
+                    <div className='relative'>
+                      <Funnel
+                        className='cursor-pointer'
+                        size={12} />
+                      {(filter_tanggal_from && filter_tanggal_to) && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' />}
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className='!px-2 !py-2'>
+                    <Input
+                      className='min-w-40'
+                      type='date'
+                      value={filter_tanggal_from || ''}
+                      onChange={e => setFilterTanggalFrom(e.target.value)}
+                      placeholder='From'
+                      label='From'
+                      labelPlacement='outside-top' />
+                    <Input
+                      className='min-w-40'
+                      type='date'
+                      value={filter_tanggal_to || ''}
+                      onChange={e => setFilterTanggalTo(e.target.value)}
+                      placeholder='To'
+                      label='To'
+                      labelPlacement='outside-top' />
+                    {(filter_tanggal_from && filter_tanggal_to) && <div
+                      onClick={() => {
+                        setFilterTanggalFrom(undefined);
+                        setFilterTanggalTo(undefined);
+                      }}
+                      className='flex items-center gap-[2px] self-start text-red-400 hover:text-red-600 cursor-pointer'>
+                      <X size={14} className='mt-px' />
+                      <div>
+                        Clear
+                      </div>
+                    </div>}
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </TableColumn>
+            <TableColumn>
+              <div className='flex items-center gap-2'>
+                <div>
+                  Jenis
+                </div>
+                <Popover placement='bottom'>
+                  <PopoverTrigger
+                    className='outline-none'>
+                    <div className='relative'>
+                      <Funnel
+                        className='cursor-pointer'
+                        size={12} />
+                      {(filter_jenis_pengeluaran_id_list?.length ?? 0) > 0 && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' />}
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className='!px-1'>
+                    <Select
+                      className="w-40"
+                      selectionMode='multiple'
+                      selectedKeys={filter_jenis_pengeluaran_id_list ?? []}
+                      aria-label='.'
+                      onSelectionChange={(val: any) => setFilterJenisPengeluaranIDList([...val])}
+                      placeholder='Pilih Jenis Pengeluaran'
+                      variant="bordered">
+                      {loader_data.list_jenis_pengeluaran.map((jp: JenisPengeluaran) => (
+                        <SelectItem textValue={jp.label} key={String(jp.id)}>
+                          {jp.label}
+                        </SelectItem>
+                      ))}
+                    </Select>
+                    {(filter_jenis_pengeluaran_id_list?.length ?? 0) > 0 && <div
+                      onClick={() => setFilterJenisPengeluaranIDList(undefined)}
+                      className='flex items-center gap-[2px] self-start text-red-400 hover:text-red-600 cursor-pointer'>
+                      <X size={14} className='mt-px' />
+                      <div>
+                        Clear
+                      </div>
+                    </div>}
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </TableColumn>
             <TableColumn>Jumlah</TableColumn>
             <TableColumn>Deskripsi</TableColumn>
             <TableColumn>{''}</TableColumn>
@@ -163,13 +260,13 @@ export const Route = createFileRoute('/admin/pengeluaran')({
             {
               data.data.map(pengeluaran => (
                 <TableRow key={pengeluaran.id}>
-                  <TableCell>{ moment(pengeluaran.tanggal).format('YYYY-MM-DD') }</TableCell>
-                  <TableCell>{ loader_data.list_jenis_pengeluaran.find(jp => jp.id == pengeluaran.id_jenis_pengeluaran)?.label }</TableCell>
-                  <TableCell>{ IDRFormatter.format(pengeluaran.jumlah) }</TableCell>
-                  <TableCell>{ pengeluaran.deskripsi }</TableCell>
+                  <TableCell>{moment(pengeluaran.tanggal).format('YYYY-MM-DD')}</TableCell>
+                  <TableCell>{loader_data.list_jenis_pengeluaran.find(jp => jp.id == pengeluaran.id_jenis_pengeluaran)?.label}</TableCell>
+                  <TableCell>{IDRFormatter.format(pengeluaran.jumlah)}</TableCell>
+                  <TableCell>{pengeluaran.deskripsi}</TableCell>
                   <TableCell>
                     <div className='flex gap-2'>
-                      <Button 
+                      <Button
                         color='warning'
                         variant='bordered'
                         size='sm'
@@ -185,7 +282,7 @@ export const Route = createFileRoute('/admin/pengeluaran')({
                         }}>
                         Edit
                       </Button>
-                      <Button 
+                      <Button
                         color='danger'
                         variant='bordered'
                         size='sm'
@@ -224,17 +321,17 @@ export const Route = createFileRoute('/admin/pengeluaran')({
                 <SelectItem textValue={String(k)} key={String(k)}>{k}</SelectItem>
               ))}
             </Select>
-            { (loading_delete_data || loading_get_data) && <Spinner size='sm' />}
+            {(loading_delete_data || loading_get_data) && <Spinner size='sm' />}
           </div>
         </div>
-        
+
         {/* FORM MODAL */}
         <Modal
           isOpen={open_modal_form}
           onOpenChange={setOpenModalForm}>
           <ModalContent>
             <ModalHeader>
-              { selected_item ? 'Update Data' : 'Add New Data' }
+              {selected_item ? 'Update Data' : 'Add New Data'}
             </ModalHeader>
             <ModalBody className='flex flex-col gap-2'>
               <Autocomplete
@@ -244,7 +341,7 @@ export const Route = createFileRoute('/admin/pengeluaran')({
                 variant="bordered">
                 {loader_data.list_jenis_pengeluaran.map((jp) => (
                   <AutocompleteItem textValue={jp.label} key={String(jp.id)}>
-                    { jp.label }
+                    {jp.label}
                   </AutocompleteItem>
                 ))}
               </Autocomplete>
@@ -275,7 +372,7 @@ export const Route = createFileRoute('/admin/pengeluaran')({
                 isLoading={loading_submit_data}
                 color="primary"
                 onPress={submitData}>
-                { selected_item ? 'Update' : 'Add' }
+                {selected_item ? 'Update' : 'Add'}
               </Button>
             </ModalFooter>
           </ModalContent>

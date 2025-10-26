@@ -42,8 +42,8 @@ export class T_adminGetTransaksi_query {
   @IsNumber({}, { message: 'filter_pelanggan_id must be a number (decimal)' })
   filter_pelanggan_id?: number
   @IsOptional()
-  @IsString({ message: 'filter_metode_pembayaran must be a string' })
-  filter_metode_pembayaran?: string
+  @IsString({ message: 'filter_metode_pembayaran_csv must be a string' })
+  filter_metode_pembayaran_csv?: string
   @IsOptional()
   @Transform((param?: any): boolean | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : (param?.value === 'true' || ((typeof param?.value === 'boolean') && param?.value)))
   @IsBoolean({ message: 'filter_sudah_lunas must be a boolean' })

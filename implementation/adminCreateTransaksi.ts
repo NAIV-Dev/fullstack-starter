@@ -12,6 +12,10 @@ export const adminCreateTransaksi: T_adminCreateTransaksi = async req => {
   const admin = await getAdminFromAuthHeader(req.headers.authorization);
   const trx = new Transaksi();
 
+  if (req.body.items.length === 0) {
+    throw new Error(`Item transaksi harus diisi minimal satu`);
+  }
+
   if (req.body.pelanggan_baru) {
     let pelanggan = await Pelanggan.findOneBy({
       nama: req.body.pelanggan_baru.nama ?? '',
