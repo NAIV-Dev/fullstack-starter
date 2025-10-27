@@ -51,6 +51,11 @@ export function HeaderDesktopMenu(props: HeaderDesktopMenuProps) {
           className="text-sky-500">
           Kasir
         </a>
+        <a
+          href="/admin/setting"
+          className="text-sky-500">
+          Setting
+        </a>
       </> }
       <a
         onClick={props.onLogout}

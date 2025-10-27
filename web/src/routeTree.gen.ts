@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as KasirIndexRouteImport } from './routes/kasir/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminSettingRouteImport } from './routes/admin/setting'
 import { Route as AdminPengeluaranRouteImport } from './routes/admin/pengeluaran'
 import { Route as AdminPelangganRouteImport } from './routes/admin/pelanggan'
 import { Route as AdminLayananRouteImport } from './routes/admin/layanan'
@@ -34,6 +35,11 @@ const KasirIndexRoute = KasirIndexRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSettingRoute = AdminSettingRouteImport.update({
+  id: '/admin/setting',
+  path: '/admin/setting',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminPengeluaranRoute = AdminPengeluaranRouteImport.update({
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/admin/layanan': typeof AdminLayananRoute
   '/admin/pelanggan': typeof AdminPelangganRoute
   '/admin/pengeluaran': typeof AdminPengeluaranRoute
+  '/admin/setting': typeof AdminSettingRoute
   '/admin': typeof AdminIndexRoute
   '/kasir': typeof KasirIndexRoute
   '/admin/transaksi/$id': typeof AdminTransaksiIdRoute
@@ -97,6 +104,7 @@ export interface FileRoutesByTo {
   '/admin/layanan': typeof AdminLayananRoute
   '/admin/pelanggan': typeof AdminPelangganRoute
   '/admin/pengeluaran': typeof AdminPengeluaranRoute
+  '/admin/setting': typeof AdminSettingRoute
   '/admin': typeof AdminIndexRoute
   '/kasir': typeof KasirIndexRoute
   '/admin/transaksi/$id': typeof AdminTransaksiIdRoute
@@ -111,6 +119,7 @@ export interface FileRoutesById {
   '/admin/layanan': typeof AdminLayananRoute
   '/admin/pelanggan': typeof AdminPelangganRoute
   '/admin/pengeluaran': typeof AdminPengeluaranRoute
+  '/admin/setting': typeof AdminSettingRoute
   '/admin/': typeof AdminIndexRoute
   '/kasir/': typeof KasirIndexRoute
   '/admin/transaksi/$id': typeof AdminTransaksiIdRoute
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/admin/layanan'
     | '/admin/pelanggan'
     | '/admin/pengeluaran'
+    | '/admin/setting'
     | '/admin'
     | '/kasir'
     | '/admin/transaksi/$id'
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/admin/layanan'
     | '/admin/pelanggan'
     | '/admin/pengeluaran'
+    | '/admin/setting'
     | '/admin'
     | '/kasir'
     | '/admin/transaksi/$id'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/admin/layanan'
     | '/admin/pelanggan'
     | '/admin/pengeluaran'
+    | '/admin/setting'
     | '/admin/'
     | '/kasir/'
     | '/admin/transaksi/$id'
@@ -166,6 +178,7 @@ export interface RootRouteChildren {
   AdminLayananRoute: typeof AdminLayananRoute
   AdminPelangganRoute: typeof AdminPelangganRoute
   AdminPengeluaranRoute: typeof AdminPengeluaranRoute
+  AdminSettingRoute: typeof AdminSettingRoute
   AdminIndexRoute: typeof AdminIndexRoute
   KasirIndexRoute: typeof KasirIndexRoute
   AdminTransaksiIdRoute: typeof AdminTransaksiIdRoute
@@ -194,6 +207,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/setting': {
+      id: '/admin/setting'
+      path: '/admin/setting'
+      fullPath: '/admin/setting'
+      preLoaderRoute: typeof AdminSettingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/pengeluaran': {
@@ -262,6 +282,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLayananRoute: AdminLayananRoute,
   AdminPelangganRoute: AdminPelangganRoute,
   AdminPengeluaranRoute: AdminPengeluaranRoute,
+  AdminSettingRoute: AdminSettingRoute,
   AdminIndexRoute: AdminIndexRoute,
   KasirIndexRoute: KasirIndexRoute,
   AdminTransaksiIdRoute: AdminTransaksiIdRoute,

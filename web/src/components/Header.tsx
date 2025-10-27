@@ -1,8 +1,10 @@
-import { useRef, useState, type HTMLAttributes } from "react";
+import { useEffect, useRef, useState, type HTMLAttributes } from "react";
 import { HeaderMobileMenu } from "./HeaderMobileMenu";
 import { HeaderDesktopMenu } from "./HeaderDesktopMenu";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { UserSession } from "@/user-session";
+import { AxiosClient } from "@/api-client/AxiosClient";
+import { useSystemConfig } from "@/hooks/useSystemConfig";
 
 interface HeaderProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -11,6 +13,7 @@ export function Header(props: HeaderProps) {
   const [open_header_desktop, setOpenHeaderDesktop] = useState<boolean>(false);
   const menu_desktop_ref = useRef<HTMLDivElement>(null);
   const user = UserSession.getUser();
+  const { system_name } = useSystemConfig();
 
   useOutsideClick(menu_desktop_ref, () => {
     setOpenHeaderDesktop(false);
@@ -28,7 +31,7 @@ export function Header(props: HeaderProps) {
       <div className="flex items-center gap-3">
         <a href="/" className="flex items-center gap-3">
           <div className="text-2xl font-semibold">
-            Wening Laundry
+            { system_name }
           </div>
         </a>
       </div>

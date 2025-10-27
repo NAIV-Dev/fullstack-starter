@@ -1,0 +1,48 @@
+schema ItemSetting {
+  key string required
+  value string required
+}
+
+api get /setting {
+  alias getSetting
+  headers {
+    authorization string required
+  }
+  return array schema.ItemSetting required
+}
+
+api get /setting/:key {
+  alias getSettingByKey
+  headers {
+    authorization string
+  }
+  path {
+    key string required
+  }
+  return schema.ItemSetting required
+}
+
+api post /setting {
+  alias createOrUpdateSetting
+  headers {
+    authorization string required
+  }
+  body {
+    data array {
+      key string required
+      value string required
+    } required
+  }
+  return boolean required
+}
+
+api delete /setting/:key {
+  alias deleteSetting
+  headers {
+    authorization string required
+  }
+  path {
+    key string required
+  }
+  return boolean required
+}

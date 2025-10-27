@@ -25,6 +25,10 @@ import { T_adminCreatePengeluaran } from "./api/adminCreatePengeluaran";
 import { T_adminGetPengeluaranByID } from "./api/adminGetPengeluaranByID";
 import { T_adminUpdatePengeluaranByID } from "./api/adminUpdatePengeluaranByID";
 import { T_adminDeletePengeluaranByID } from "./api/adminDeletePengeluaranByID";
+import { T_getSetting } from "./api/getSetting";
+import { T_getSettingByKey } from "./api/getSettingByKey";
+import { T_createOrUpdateSetting } from "./api/createOrUpdateSetting";
+import { T_deleteSetting } from "./api/deleteSetting";
 import { T_adminGetTransaksi } from "./api/adminGetTransaksi";
 import { T_adminCreateTransaksi } from "./api/adminCreateTransaksi";
 import { T_adminGetTransaksiByID } from "./api/adminGetTransaksiByID";
@@ -174,6 +178,22 @@ export namespace AxiosClient {
   }
   export const adminDeletePengeluaranByID: T_adminDeletePengeluaranByID = async (req, base_url: string = BaseURL.instance.base_url) => {
     const final_url = __build_path(base_url, '/admin/pengeluaran/:id', req.path);
+    return (await axios['delete'](final_url, { headers: req.headers as any, })).data as any;
+  }
+  export const getSetting: T_getSetting = async (req, base_url: string = BaseURL.instance.base_url) => {
+    const final_url = __build_path(base_url, '/setting', {});
+    return (await axios['get'](final_url, { headers: req.headers as any, })).data as any;
+  }
+  export const getSettingByKey: T_getSettingByKey = async (req, base_url: string = BaseURL.instance.base_url) => {
+    const final_url = __build_path(base_url, '/setting/:key', req.path);
+    return (await axios['get'](final_url, { headers: req.headers as any, })).data as any;
+  }
+  export const createOrUpdateSetting: T_createOrUpdateSetting = async (req, base_url: string = BaseURL.instance.base_url) => {
+    const final_url = __build_path(base_url, '/setting', {});
+    return (await axios['post'](final_url, req.body, { headers: req.headers as any, })).data as any;
+  }
+  export const deleteSetting: T_deleteSetting = async (req, base_url: string = BaseURL.instance.base_url) => {
+    const final_url = __build_path(base_url, '/setting/:key', req.path);
     return (await axios['delete'](final_url, { headers: req.headers as any, })).data as any;
   }
   export const adminGetTransaksi: T_adminGetTransaksi = async (req, base_url: string = BaseURL.instance.base_url) => {

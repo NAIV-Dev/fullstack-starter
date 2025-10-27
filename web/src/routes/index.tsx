@@ -5,6 +5,7 @@ import { AxiosClient } from '@/api-client/AxiosClient';
 import { addToast, Button, Input, toast } from '@heroui/react';
 import { UserSession } from '@/user-session';
 import { UserRole } from '@/api-client/model/enum/UserRole';
+import { useSystemConfig } from '@/hooks/useSystemConfig';
 
 export const Route = createFileRoute('/')({
   async loader(context) {
@@ -22,6 +23,7 @@ export const Route = createFileRoute('/')({
     const [loading, setLoading] = useState<boolean>(false);
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const { system_name } = useSystemConfig();
 
     async function login() {
       try {
@@ -50,7 +52,7 @@ export const Route = createFileRoute('/')({
           lg:w-120
         `}>
           <div className='text-xl font-bold pt-2'>
-            Wening Laundry
+            { system_name }
           </div>
           <Input
             value={username}
