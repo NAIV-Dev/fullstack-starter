@@ -11,7 +11,10 @@ export const kasirGetLayanan: T_kasirGetLayanan = async req => {
       deleted_at: IsNull()
     } : { deleted_at: IsNull() },
     take: req.query.limit ?? 10,
-    skip: req.query.offset ?? 0
+    skip: req.query.offset ?? 0,
+    order: {
+      nama: 'asc'
+    }
   });
   
   return { data, total };

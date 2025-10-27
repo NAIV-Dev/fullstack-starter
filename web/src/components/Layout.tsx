@@ -8,11 +8,11 @@ export function Layout(props: LayoutProps) {
     <div
       {...props}
       className={`flex flex-col min-h-[100dvh]`}>
-      <div className="sticky top-0 z-[12]">
+      <div className="sticky top-0 z-[29]">
         <Header />
       </div>
       <div className={`
-        px-4 py-5
+        px-3 py-5
         lg:px-[15%] lg:py-10
         ${props.className || ''}
       `}>

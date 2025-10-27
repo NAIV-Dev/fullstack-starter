@@ -13,7 +13,7 @@ export const adminGetLayanan: T_adminGetLayanan = async req => {
     take: req.query.limit ?? 10,
     skip: req.query.offset ?? 0,
     order: {
-      id: 'desc'
+      nama: 'asc'
     }
   });
   

@@ -3,6 +3,7 @@ import { MetodePembayaran } from '@/api-client/model/enum/MetodePembayaran';
 import { Layanan } from '@/api-client/model/table/Layanan';
 import { Pelanggan } from '@/api-client/model/table/Pelanggan';
 import { User } from '@/api-client/model/table/User';
+import { InputPopup } from '@/components/InputPopup';
 import { Layout } from '@/components/Layout';
 import { TrxItemBreakdown } from '@/components/TrxItemBreakdown';
 import { UserSession } from '@/user-session';
@@ -88,7 +89,7 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
 
     const total_item_amount = payload.items.reduce((acc: number, curr) => {
       const harga_layanan = loader_data.list_layanan.find(l => l.id == curr.layanan_id)?.harga_satuan || 0;
-      return acc + +harga_layanan * +curr.jumlah;
+      return acc + +harga_layanan * +(curr.jumlah || 0);
     }, 0);
 
     async function submit() {
@@ -300,7 +301,7 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
                         flex flex-col gap-2
                         lg:flex-row
                       `}>
-                      <Autocomplete
+                      {/* <Autocomplete
                         className='flex-[1.25]'
                         selectedKey={String(item.layanan_id)}
                         placeholder='Pilih Layanan'
@@ -311,7 +312,16 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
                             {l.nama} ({IDRFormatter.format(l.harga_satuan)}/{l.label_satuan})
                           </AutocompleteItem>
                         ))}
-                      </Autocomplete>
+                      </Autocomplete> */}
+                      <InputPopup
+                        items={loader_data.list_layanan.map(l => ({
+                          label: `${l.nama} (${IDRFormatter.format(l.harga_satuan)}/${l.label_satuan})`,
+                          key: l.id
+                        }))}
+                        selected={item.layanan_id}
+                        onSelectedChange={layanan_id => updateItem(i, layanan_id, item.jumlah)}
+                        className='flex-[1.25]'
+                        placeholder='Pilih Layanan' />
                       <div className='flex-1 flex gap-2'>
                         <Input
                           type='number'

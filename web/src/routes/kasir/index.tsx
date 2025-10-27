@@ -218,13 +218,6 @@ export const Route = createFileRoute('/kasir/')({
                             className='!min-w-0'>
                             <Printer size={14} />
                           </Button>
-                          <Button
-                            color='default'
-                            variant='bordered'
-                            size='sm'
-                            className='!min-w-0'>
-                            <Download size={14} />
-                          </Button>
                         </div>
                       </div>
                     </div>

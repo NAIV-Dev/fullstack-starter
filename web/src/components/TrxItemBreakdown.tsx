@@ -29,10 +29,10 @@ export function TrxItemBreakdown(props: TrxItemBreakdownProps) {
               lg:flex-row
             `}>
               <div>
-                x{ item.qty }
+                x{ (item.qty || 0) }
               </div>
               <div className="lg:w-35 font-bold">
-                { IDRFormatter.format(item.price * item.qty) }
+                { IDRFormatter.format(item.price * (item.qty || 0)) }
               </div>
             </div>
           </div>
