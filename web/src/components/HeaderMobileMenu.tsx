@@ -1,4 +1,5 @@
 import { UserRole } from "@/api-client/model/enum/UserRole";
+import { useSystemConfig } from "@/hooks/useSystemConfig";
 import { UserSession } from "@/user-session";
 import { IDRFormatter } from "@/utility";
 import { useEffect, useState } from "react";
@@ -9,12 +10,13 @@ interface HeaderMobileMenuProps {
 
 export function HeaderMobileMenu(props: HeaderMobileMenuProps) {
   const user = UserSession.getUser();
+  const { system_name } = useSystemConfig();
   
   return (
     <div className="flex flex-col items-end gap-4 py-5 px-7">
       <a href="/" className="flex items-center gap-3">
         <div className="text-2xl font-semibold">
-          Wening Laundry
+          { system_name }
         </div>
       </a>
       <div className="pl-3 font-semibold">
