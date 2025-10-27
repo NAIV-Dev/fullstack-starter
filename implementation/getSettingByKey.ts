@@ -16,6 +16,6 @@ export const getSettingByKey: T_getSettingByKey = async req => {
   }
   return {
     key: req.path.key,
-    value: String(await PersistentDB.get(req.path.key))
+    value: await PersistentDB.get(req.path.key) as any
   };
 }
