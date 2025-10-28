@@ -21,7 +21,12 @@ interface LoaderData {
 }
 interface ModalForm {
   pengguna_id: number
-  pelanggan_id: number
+  pelanggan_id?: number
+  pelanggan_baru?: {
+    nama?: string
+    nomor_hp?: string
+    alamat?: string
+  }
   tanggal_transaksi: string
   metode_pembayaran: string
   sudah_lunas?: boolean
@@ -90,6 +95,7 @@ export const Route = createFileRoute('/admin/transaksi/$id')({
       items: []
     });
     const [loading, setLoading] = useState<boolean>(false);
+    const new_customer_mode = Boolean(payload.pelanggan_baru);
 
     const total_item_amount = payload.items.reduce((acc: number, curr) => {
       const harga_layanan = loader_data.list_layanan.find(l => l.id == curr.layanan_id)?.harga_satuan || 0;
@@ -193,19 +199,86 @@ export const Route = createFileRoute('/admin/transaksi/$id')({
                   </SelectItem>
                 ))}
               </Select>
-              <Autocomplete
-                selectedKey={String(payload.pelanggan_id || '')}
-                label='Pelanggan'
-                labelPlacement='outside'
-                placeholder='Pilih Pelanggan'
-                onSelectionChange={val => setPayload({ ...payload, pelanggan_id: +(val as any) })}
-                variant="bordered">
-                {loader_data.list_pelanggan.map((p) => (
-                  <AutocompleteItem textValue={`${p.nama} (${p.nomor_hp})`} key={String(p.id)}>
-                    {p.nama} ({p.nomor_hp})
-                  </AutocompleteItem>
-                ))}
-              </Autocomplete>
+              <div className='flex flex-col gap-2 shadow-[0px_1px_20px_1px_rgba(0,0,0,.1)] p-4 rounded-2xl mt-2'>
+                <div className='flex gap-2'>
+                  <Button
+                    variant='bordered'
+                    color={new_customer_mode ? 'default' : 'primary'}
+                    onPress={() => setPayload({
+                      ...payload,
+                      pelanggan_baru: undefined
+                    })}
+                    className='flex-1'>
+                    Cari Pelanggan
+                  </Button>
+                  <Button
+                    variant='bordered'
+                    color={new_customer_mode ? 'primary' : 'default'}
+                    onPress={() => setPayload({
+                      ...payload,
+                      pelanggan_baru: {}
+                    })}
+                    className='flex-1'>
+                    Pelanggan Baru
+                  </Button>
+                </div>
+                { new_customer_mode && <div className='flex flex-col gap-2'>
+                  <div className={`
+                    flex flex-col gap-2
+                    lg:flex-row lg:gap-3
+                  `}>
+                    <Input
+                      value={payload.pelanggan_baru?.nama}
+                      onChange={e => setPayload({
+                        ...payload,
+                        pelanggan_baru: {
+                          ...payload.pelanggan_baru,
+                          nama: e.target.value
+                        }
+                      })}
+                      placeholder='Nama'
+                      label='Nama'
+                      labelPlacement='outside-top' />
+                    <Input
+                      value={payload.pelanggan_baru?.nomor_hp}
+                      onChange={e => setPayload({
+                        ...payload,
+                        pelanggan_baru: {
+                          ...payload.pelanggan_baru,
+                          nomor_hp: e.target.value
+                        }
+                      })}
+                      placeholder='Nomor HP'
+                      label='Nomor HP'
+                      labelPlacement='outside-top' />
+                  </div>
+                  <Textarea
+                    value={payload.pelanggan_baru?.alamat}
+                    onChange={e => setPayload({
+                      ...payload,
+                      pelanggan_baru: {
+                        ...payload.pelanggan_baru,
+                        alamat: e.target.value
+                      }
+                    })}
+                    placeholder='Alamat'
+                    label='Alamat'
+                    labelPlacement='outside-top' />
+                </div> }
+                { !new_customer_mode && <Autocomplete
+                  selectedKey={String(payload.pelanggan_id || '')}
+                  label='Pelanggan'
+                  labelPlacement='outside'
+                  placeholder='Pilih Pelanggan'
+                  onSelectionChange={val => setPayload({ ...payload, pelanggan_id: +(val as any) })}
+                  variant="bordered">
+                  {loader_data.list_pelanggan.map((p) => (
+                    <AutocompleteItem textValue={`${p.nama} (${p.nomor_hp})`} key={String(p.id)}>
+                      {p.nama} ({p.nomor_hp})
+                    </AutocompleteItem>
+                  ))}
+                </Autocomplete> }
+              </div>
               <Select
                 selectionMode='single'
                 selectedKeys={[String(payload.metode_pembayaran)]}
