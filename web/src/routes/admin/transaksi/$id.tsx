@@ -130,7 +130,7 @@ export const Route = createFileRoute('/admin/transaksi/$id')({
           });
         }
 
-        const trx_fulldata = await AxiosClient.kasirGetTransaksiByID({
+        const trx_fulldata = await AxiosClient.adminGetTransaksiByID({
           headers: { authorization: UserSession.getToken() },
           path: { id: created_transaksi.id }
         });
