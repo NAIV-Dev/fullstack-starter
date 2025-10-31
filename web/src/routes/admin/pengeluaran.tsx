@@ -176,7 +176,7 @@ export const Route = createFileRoute('/admin/pengeluaran')({
                     <div className='relative'>
                       <Funnel
                         className='cursor-pointer'
-                        size={12} />
+                        size={17} />
                       {(filter_tanggal_from && filter_tanggal_to) && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' />}
                     </div>
                   </PopoverTrigger>
@@ -223,7 +223,7 @@ export const Route = createFileRoute('/admin/pengeluaran')({
                     <div className='relative'>
                       <Funnel
                         className='cursor-pointer'
-                        size={12} />
+                        size={17} />
                       {(filter_jenis_pengeluaran_id_list?.length ?? 0) > 0 && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' />}
                     </div>
                   </PopoverTrigger>

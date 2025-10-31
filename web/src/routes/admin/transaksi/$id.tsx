@@ -105,6 +105,9 @@ export const Route = createFileRoute('/admin/transaksi/$id')({
     }, 0);
 
     async function submit() {
+      if (loading) {
+        return;
+      }
       try {
         setLoading(true);
         let created_transaksi: Transaksi;
@@ -127,17 +130,20 @@ export const Route = createFileRoute('/admin/transaksi/$id')({
           });
         }
 
-        setTimeout(async () => {
-          await new Promise(async (resolve) => {
-            const trx_fulldata = await AxiosClient.kasirGetTransaksiByID({
-              headers: { authorization: UserSession.getToken() },
-              path: { id: created_transaksi.id }
-            })
-            globalPrintReceipt(trx_fulldata, loader_data.list_layanan);
-            resolve(null);
-          });
-          window.location.replace('/admin/transaksi');
-        }, 500);
+        const trx_fulldata = await AxiosClient.kasirGetTransaksiByID({
+          headers: { authorization: UserSession.getToken() },
+          path: { id: created_transaksi.id }
+        });
+
+        await new Promise(async (resolve) => {
+          setTimeout(async () => {
+            try {
+              globalPrintReceipt(trx_fulldata, loader_data.list_layanan);
+              resolve(null);
+            } catch { }
+            window.location.replace('/admin/transaksi');
+          }, 500);
+        });
       } catch (err: any) {
         addToast({ title: "Error", color: 'danger', description: err?.response?.data?.toString() });
       } finally {

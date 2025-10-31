@@ -187,7 +187,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
                     <div className='relative'>
                       <Funnel 
                         className='cursor-pointer'
-                        size={12} />
+                        size={17} />
                       { keyword && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' /> }
                     </div>
                   </PopoverTrigger>
@@ -220,6 +220,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
                 </Popover>
               </div>
             </TableColumn>
+            <TableColumn>Jumlah</TableColumn>
             <TableColumn>
               <div className='flex items-center gap-2'>
                 <div>
@@ -231,7 +232,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
                     <div className='relative'>
                       <Funnel 
                         className='cursor-pointer'
-                        size={12} />
+                        size={17} />
                       { (filter_tanggal_from && filter_tanggal_to) && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' /> }
                     </div>
                   </PopoverTrigger>
@@ -278,7 +279,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
                     <div className='relative'>
                       <Funnel 
                         className='cursor-pointer'
-                        size={12} />
+                        size={17} />
                       { filter_pelanggan_id && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' /> }
                     </div>
                   </PopoverTrigger>
@@ -321,7 +322,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
                     <div className='relative'>
                       <Funnel 
                         className='cursor-pointer'
-                        size={12} />
+                        size={17} />
                       { (typeof filter_sudah_lunas === 'boolean' || typeof filter_sudah_diambil === 'boolean') && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' /> }
                     </div>
                   </PopoverTrigger>
@@ -386,7 +387,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
                     <div className='relative'>
                       <Funnel 
                         className='cursor-pointer'
-                        size={12} />
+                        size={17} />
                       { (filter_metode_pembayaran_list?.length ?? 0) > 0 && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' /> }
                     </div>
                   </PopoverTrigger>
@@ -417,7 +418,6 @@ export const Route = createFileRoute('/admin/transaksi/')({
                 </Popover>
               </div>
             </TableColumn>
-            <TableColumn>Jumlah</TableColumn>
             <TableColumn>{''}</TableColumn>
           </TableHeader>
           <TableBody>
@@ -472,7 +472,10 @@ export const Route = createFileRoute('/admin/transaksi/')({
                     </div>
                   </TableCell>
                   <TableCell>
-                    { moment(transaksi.transaksi.tanggal_transaksi).format('dddd, DD MMMM YYYY HH:mm') }
+                    { IDRFormatter.format(transaksi.transaksi.total_harga) }
+                  </TableCell>
+                  <TableCell>
+                    { moment(transaksi.transaksi.created_at).format('dddd, DD MMMM YYYY HH:mm') }
                   </TableCell>
                   <TableCell>
                     <div className='flex flex-col'>
@@ -510,9 +513,6 @@ export const Route = createFileRoute('/admin/transaksi/')({
                     { transaksi.transaksi.metode_pembayaran }
                   </TableCell>
                   <TableCell>
-                    { IDRFormatter.format(transaksi.transaksi.total_harga) }
-                  </TableCell>
-                  <TableCell>
                     <div className='flex gap-2'>
                       <Button 
                         color='warning'
@@ -536,12 +536,12 @@ export const Route = createFileRoute('/admin/transaksi/')({
             }
             <TableRow className='bg-zinc-100'>
               <TableCell>Menampilkan {data.data.length} transaksi</TableCell>
-              <TableCell>{''}</TableCell>
-              <TableCell>{''}</TableCell>
-              <TableCell>{''}</TableCell>
-              <TableCell>{''}</TableCell>
-              <TableCell>{''}</TableCell>
               <TableCell className='font-bold'>{ IDRFormatter.format(total_amount_trx) }</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell>{''}</TableCell>
               <TableCell>{''}</TableCell>
             </TableRow>
           </TableBody>

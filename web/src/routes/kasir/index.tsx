@@ -193,7 +193,7 @@ export const Route = createFileRoute('/kasir/')({
                         { transaksi.transaksi.nomor_transaksi }
                       </div>
                       <div>
-                        { moment(transaksi.transaksi.created_at).format('dddd, DD MMMM YYYY HH:mm') }
+                        { moment(transaksi.transaksi.tanggal_transaksi).format('dddd, DD MMMM YYYY') }
                       </div>
                       <div className='flex flex-col gap-2'>
                         <Button

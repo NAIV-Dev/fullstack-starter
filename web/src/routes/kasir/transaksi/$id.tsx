@@ -95,6 +95,9 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
     }, 0);
 
     async function submit() {
+      if (loading) {
+        return;
+      }
       try {
         setLoading(true);
         let created_transaksi: Transaksi;
@@ -116,18 +119,21 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
             }
           });
         }
-        
-        setTimeout(async () => {
-          await new Promise(async (resolve) => {
-            const trx_fulldata = await AxiosClient.kasirGetTransaksiByID({
-              headers: { authorization: UserSession.getToken() },
-              path: { id: created_transaksi.id }
-            })
-            globalPrintReceipt(trx_fulldata, loader_data.list_layanan);
-            resolve(null);
-          });
-          window.location.replace('/kasir');
-        }, 500);
+
+        const trx_fulldata = await AxiosClient.kasirGetTransaksiByID({
+          headers: { authorization: UserSession.getToken() },
+          path: { id: created_transaksi.id }
+        });
+
+        await new Promise(async (resolve) => {
+          setTimeout(async () => {
+            try {
+              globalPrintReceipt(trx_fulldata, loader_data.list_layanan);
+              resolve(null);
+            } catch { }
+            window.location.replace('/kasir');
+          }, 500);
+        });
       } catch (err: any) {
         addToast({ title: "Error", color: 'danger', description: err?.response?.data?.toString() });
       } finally {
@@ -165,14 +171,14 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
         ]
       });
     }
-    
+
     useEffect(() => {
       const Android = (window as any).Android;
       if (Android && !Android.isBluetoothPermissionGranted()) {
         Android.askBluetoothPermission();
       }
     }, []);
-    
+
     return (
       <Layout className='flex flex-col gap-4'>
 
@@ -181,7 +187,7 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
           text-3xl font-bold text-center
           lg:text-left lg:text-4xl 
         `}>
-          { edit_mode ? 'Ubah' : 'Tambah' } Transaksi
+          {edit_mode ? 'Ubah' : 'Tambah'} Transaksi
         </div>
         <div className='flex flex-col gap-4'>
           <div className={`
@@ -219,7 +225,7 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
                     Pelanggan Baru
                   </Button>
                 </div>
-                { new_customer_mode && <div className='flex flex-col gap-2'>
+                {new_customer_mode && <div className='flex flex-col gap-2'>
                   <div className={`
                     flex flex-col gap-2
                     lg:flex-row lg:gap-3
@@ -261,8 +267,8 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
                     placeholder='Alamat'
                     label='Alamat'
                     labelPlacement='outside-top' />
-                </div> }
-                { !new_customer_mode && <Autocomplete
+                </div>}
+                {!new_customer_mode && <Autocomplete
                   selectedKey={String(payload.pelanggan_id || '')}
                   label='Pelanggan'
                   labelPlacement='outside'
@@ -274,7 +280,7 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
                       {p.nama} ({p.nomor_hp})
                     </AutocompleteItem>
                   ))}
-                </Autocomplete> }
+                </Autocomplete>}
               </div>
               <Select
                 selectionMode='single'
@@ -288,14 +294,14 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
                   <SelectItem textValue={String(mp)} key={String(mp)}>{mp}</SelectItem>
                 ))}
               </Select>
-              <RadioGroup 
+              <RadioGroup
                 label="Status Pembayaran"
                 value={payload.sudah_lunas ? 'true' : 'false'}
                 onChange={e => setPayload({ ...payload, sudah_lunas: e.target.value === 'true' })}>
                 <Radio color='danger' value="false">Belum Bayar</Radio>
                 <Radio color='primary' value="true">Sudah Lunas</Radio>
               </RadioGroup>
-              <RadioGroup 
+              <RadioGroup
                 label="Status Pengambilan"
                 value={payload.sudah_diambil ? 'true' : 'false'}
                 onChange={e => setPayload({ ...payload, sudah_diambil: e.target.value === 'true' })}>
@@ -316,7 +322,7 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
               <div className='flex flex-col gap-4'>
                 {
                   payload.items.map((item, i: number) => (
-                    <div 
+                    <div
                       key={i}
                       className={`
                         flex flex-col gap-2
@@ -385,12 +391,12 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
                   Total
                 </div>
                 <div className='font-bold'>
-                  { IDRFormatter.format(total_item_amount) }
+                  {IDRFormatter.format(total_item_amount)}
                 </div>
               </div>
             </div>
           </div>
-          <Button 
+          <Button
             color='primary'
             variant='shadow'
             isLoading={loading}
@@ -398,7 +404,7 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
             className={`
               lg:self-start
             `}>
-            { edit_mode ? 'Simpan' : 'Tambah Transaksi' }
+            {edit_mode ? 'Simpan' : 'Tambah Transaksi'}
           </Button>
         </div>
       </Layout>
