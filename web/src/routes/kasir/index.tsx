@@ -337,13 +337,13 @@ export const Route = createFileRoute('/kasir/')({
               </Button>
             </ModalFooter>
           </ModalContent>
-          { active_print_transaction && <PrintTransaksiModal
-            listLayanan={loader_data.list_layanan}
-            data={active_print_transaction}
-            open={open_print_modal}
-            setOpen={setOpenPrintModal}
-            onFinish={() => {}} />}
         </Modal> }
+        { active_print_transaction && <PrintTransaksiModal
+          listLayanan={loader_data.list_layanan}
+          data={active_print_transaction}
+          open={open_print_modal}
+          setOpen={setOpenPrintModal}
+          onFinish={() => {}} />}
       </Layout>
     );
   }
