@@ -2,16 +2,18 @@ import { AxiosClient } from '@/api-client/AxiosClient';
 import { MetodePembayaran } from '@/api-client/model/enum/MetodePembayaran';
 import { Layanan } from '@/api-client/model/table/Layanan';
 import { Pelanggan } from '@/api-client/model/table/Pelanggan';
+import { Transaksi } from '@/api-client/model/table/Transaksi';
 import { User } from '@/api-client/model/table/User';
 import { InputPopup } from '@/components/InputPopup';
 import { Layout } from '@/components/Layout';
+import { globalPrintReceipt } from '@/components/PrintTransaksiModal';
 import { TrxItemBreakdown } from '@/components/TrxItemBreakdown';
 import { UserSession } from '@/user-session';
 import { IDRFormatter } from '@/utility';
 import { addToast, Autocomplete, AutocompleteItem, Button, Input, Radio, RadioGroup, Select, SelectItem, Textarea } from '@heroui/react';
 import { createFileRoute } from '@tanstack/react-router'
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface LoaderData {
   initial_modal_form?: ModalForm & { id: number }
@@ -95,8 +97,9 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
     async function submit() {
       try {
         setLoading(true);
+        let created_transaksi: Transaksi;
         if (loader_data.initial_modal_form) {
-          await AxiosClient.kasirUpdateTransaksiByID({
+          created_transaksi = await AxiosClient.kasirUpdateTransaksiByID({
             headers: { authorization: UserSession.getToken() },
             path: { id: loader_data.initial_modal_form.id },
             body: {
@@ -105,7 +108,7 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
             }
           });
         } else {
-          await AxiosClient.kasirCreateTransaksi({
+          created_transaksi = await AxiosClient.kasirCreateTransaksi({
             headers: { authorization: UserSession.getToken() },
             body: {
               ...payload,
@@ -113,7 +116,18 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
             }
           });
         }
-        window.location.replace('/kasir');
+        
+        setTimeout(async () => {
+          await new Promise(async (resolve) => {
+            const trx_fulldata = await AxiosClient.kasirGetTransaksiByID({
+              headers: { authorization: UserSession.getToken() },
+              path: { id: created_transaksi.id }
+            })
+            globalPrintReceipt(trx_fulldata, loader_data.list_layanan);
+            resolve(null);
+          });
+          window.location.replace('/kasir');
+        }, 500);
       } catch (err: any) {
         addToast({ title: "Error", color: 'danger', description: err?.response?.data?.toString() });
       } finally {
@@ -151,6 +165,13 @@ export const Route = createFileRoute('/kasir/transaksi/$id')({
         ]
       });
     }
+    
+    useEffect(() => {
+      const Android = (window as any).Android;
+      if (Android && !Android.isBluetoothPermissionGranted()) {
+        Android.askBluetoothPermission();
+      }
+    }, []);
     
     return (
       <Layout className='flex flex-col gap-4'>

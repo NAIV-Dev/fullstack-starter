@@ -14,6 +14,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Download, Pencil, Printer } from 'lucide-react'
 import { ItemDataKasirTotalHariIni } from '@/api-client/schema/ItemDataKasirTotalHariIni';
+import { PrintTransaksiModal } from '@/components/PrintTransaksiModal';
 
 interface LoaderData {
   list_pelanggan: Pelanggan[]
@@ -64,6 +65,9 @@ export const Route = createFileRoute('/kasir/')({
     const [loading_delete_data, setLoadingDeleteData] = useState<boolean>(false);
     const [open_modal_form, setOpenModalForm] = useState<boolean>(false);
     const [update_status_form, setUpdateStatusForm] = useState<ModalForm>();
+
+    const [open_print_modal, setOpenPrintModal] = useState<boolean>(false);
+    const [active_print_transaction, setActivePrintTransaction] = useState<TransaksiFulldata>();
 
     async function getData() {
       try {
@@ -215,6 +219,10 @@ export const Route = createFileRoute('/kasir/')({
                             color='default'
                             variant='bordered'
                             size='sm'
+                            onPress={() => {
+                              setActivePrintTransaction(transaksi);
+                              setOpenPrintModal(true);
+                            }}
                             className='!min-w-0'>
                             <Printer size={14} />
                           </Button>
@@ -329,6 +337,12 @@ export const Route = createFileRoute('/kasir/')({
               </Button>
             </ModalFooter>
           </ModalContent>
+          { active_print_transaction && <PrintTransaksiModal
+            listLayanan={loader_data.list_layanan}
+            data={active_print_transaction}
+            open={open_print_modal}
+            setOpen={setOpenPrintModal}
+            onFinish={() => {}} />}
         </Modal> }
       </Layout>
     );

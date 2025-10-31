@@ -14,6 +14,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Download, Funnel, Pencil, Printer, Search, X } from 'lucide-react'
 import _ from 'lodash';
+import { PrintTransaksiModal } from '@/components/PrintTransaksiModal';
 
 interface LoaderData {
   list_pelanggan: Pelanggan[]
@@ -77,6 +78,9 @@ export const Route = createFileRoute('/admin/transaksi/')({
     const [filter_sudah_lunas, setFilterSudahLunas] = useState<boolean>();
     const [filter_sudah_diambil, setFilterSudahDiambil] = useState<boolean>();
     const [filter_metode_pembayaran_list, setFilterMetodePembayaranList] = useState<MetodePembayaran[]>();
+
+    const [open_print_modal, setOpenPrintModal] = useState<boolean>(false);
+    const [active_print_transaction, setActivePrintTransaction] = useState<TransaksiFulldata>();
 
     const total_amount_trx = data.data.reduce((acc: number, trx: TransaksiFulldata) => +acc + +trx.transaksi.total_harga, 0);
 
@@ -449,6 +453,10 @@ export const Route = createFileRoute('/admin/transaksi/')({
                             color='default'
                             variant='bordered'
                             size='sm'
+                            onPress={() => {
+                              setActivePrintTransaction(transaksi);
+                              setOpenPrintModal(true);
+                            }}
                             className='!min-w-0'>
                             <Printer size={14} />
                           </Button>
@@ -611,6 +619,12 @@ export const Route = createFileRoute('/admin/transaksi/')({
             </ModalFooter>
           </ModalContent>
         </Modal> }
+        { active_print_transaction && <PrintTransaksiModal
+          listLayanan={loader_data.list_layanan}
+          data={active_print_transaction}
+          open={open_print_modal}
+          setOpen={setOpenPrintModal}
+          onFinish={() => {}} />}
       </Layout>
     );
   }
