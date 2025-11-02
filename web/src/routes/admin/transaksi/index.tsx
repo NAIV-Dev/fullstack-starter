@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { Download, Funnel, Pencil, Printer, Search, X } from 'lucide-react'
 import _ from 'lodash';
 import { PrintTransaksiModal } from '@/components/PrintTransaksiModal';
+import { DownloadButton } from '@/components/DownloadButton';
 
 interface LoaderData {
   list_pelanggan: Pelanggan[]
@@ -460,13 +461,9 @@ export const Route = createFileRoute('/admin/transaksi/')({
                             className='!min-w-0'>
                             <Printer size={14} />
                           </Button>
-                          <Button
-                            color='default'
-                            variant='bordered'
-                            size='sm'
-                            className='!min-w-0'>
-                            <Download size={14} />
-                          </Button>
+                          <DownloadButton 
+                            data={transaksi}
+                            listLayanan={loader_data.list_layanan} />
                         </div>
                       </div>
                     </div>
