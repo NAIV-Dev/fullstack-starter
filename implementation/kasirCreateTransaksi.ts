@@ -46,6 +46,17 @@ export const kasirCreateTransaksi: T_kasirCreateTransaksi = async req => {
       throw new Error(`data pelanggan tidak boleh kosong`);
     }
   }
+
+  // update transaction paid
+  if (req.body.sudah_lunas) {
+    trx.transition_to_paid_ts = new Date();
+  }
+
+  // update transaction picked up
+  if (req.body.sudah_diambil) {
+    trx.transition_to_picked_up_ts = new Date();
+  }
+
   trx.pengguna_id = kasir.id;
   trx.nomor_transaksi = '';
   trx.tanggal_transaksi = moment(req.body.tanggal_transaksi).toDate();

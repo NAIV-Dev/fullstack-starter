@@ -38,6 +38,18 @@ export class T_adminGetTransaksi_query {
   @IsString({ message: 'filter_tanggal_to must be a string' })
   filter_tanggal_to?: string
   @IsOptional()
+  @IsString({ message: 'filter_picked_up_tanggal_from must be a string' })
+  filter_picked_up_tanggal_from?: string
+  @IsOptional()
+  @IsString({ message: 'filter_picked_up_tanggal_to must be a string' })
+  filter_picked_up_tanggal_to?: string
+  @IsOptional()
+  @IsString({ message: 'filter_paid_tanggal_from must be a string' })
+  filter_paid_tanggal_from?: string
+  @IsOptional()
+  @IsString({ message: 'filter_paid_tanggal_to must be a string' })
+  filter_paid_tanggal_to?: string
+  @IsOptional()
   @Transform((param?: any): number | null => (param?.value === null || param?.value === undefined || param?.value === '') ? null : parseFloat(param.value))
   @IsNumber({}, { message: 'filter_pelanggan_id must be a number (decimal)' })
   filter_pelanggan_id?: number

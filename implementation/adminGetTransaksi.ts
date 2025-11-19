@@ -17,6 +17,12 @@ export const adminGetTransaksi: T_adminGetTransaksi = async req => {
       tanggal_transaksi: (req.query.filter_tanggal_from && req.query.filter_tanggal_to)
         ? Between(moment(req.query.filter_tanggal_from).toDate(), moment(req.query.filter_tanggal_to).toDate())
         : undefined as any,
+      transition_to_paid_ts: (req.query.filter_paid_tanggal_from && req.query.filter_paid_tanggal_to)
+        ? Between(moment(req.query.filter_paid_tanggal_from).toDate(), moment(req.query.filter_paid_tanggal_to).toDate())
+        : undefined as any,
+      transition_to_picked_up_ts: (req.query.filter_picked_up_tanggal_from && req.query.filter_picked_up_tanggal_to)
+        ? Between(moment(req.query.filter_picked_up_tanggal_from).toDate(), moment(req.query.filter_picked_up_tanggal_to).toDate())
+        : undefined as any,
       deleted_at: IsNull()
     },
     take: req.query.limit ?? 10,

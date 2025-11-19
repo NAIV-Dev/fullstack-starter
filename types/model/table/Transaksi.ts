@@ -80,4 +80,14 @@ export class Transaksi extends BaseEntity {
     nullable: true,
   })
   deleted_at?: Date;
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  transition_to_paid_ts?: Date;
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  transition_to_picked_up_ts?: Date;
 }

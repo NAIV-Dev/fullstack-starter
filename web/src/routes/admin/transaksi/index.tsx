@@ -16,6 +16,7 @@ import { Download, Funnel, Pencil, Printer, Search, X } from 'lucide-react'
 import _ from 'lodash';
 import { PrintTransaksiModal } from '@/components/PrintTransaksiModal';
 import { DownloadButton } from '@/components/DownloadButton';
+import { TransaksiDetail } from '@/api-client/model/table/TransaksiDetail';
 
 interface LoaderData {
   list_pelanggan: Pelanggan[]
@@ -74,6 +75,10 @@ export const Route = createFileRoute('/admin/transaksi/')({
     const [filter_pelanggan_id, setFilterPelangganID] = useState<number>();
     const [filter_tanggal_from, setFilterTanggalFrom] = useState<string>();
     const [filter_tanggal_to, setFilterTanggalTo] = useState<string>();
+    const [filter_paid_tanggal_from, setFilterPaidTanggalFrom] = useState<string>();
+    const [filter_paid_tanggal_to, setFilterPaidTanggalTo] = useState<string>();
+    const [filter_picked_up_tanggal_from, setFilterPickedUpTanggalFrom] = useState<string>();
+    const [filter_picked_up_tanggal_to, setFilterPickedUpTanggalTo] = useState<string>();
     const [keyword, setKeyword] = useState<string>();
     const [temp_keyword, setTempKeyword] = useState<string>('');
     const [filter_sudah_lunas, setFilterSudahLunas] = useState<boolean>();
@@ -84,6 +89,17 @@ export const Route = createFileRoute('/admin/transaksi/')({
     const [active_print_transaction, setActivePrintTransaction] = useState<TransaksiFulldata>();
 
     const total_amount_trx = data.data.reduce((acc: number, trx: TransaksiFulldata) => +acc + +trx.transaksi.total_harga, 0);
+    const list_all_item = data.data.reduce((acc: TransaksiDetail[], curr: TransaksiFulldata) => [...acc, ...curr.list_item], []);
+    const _group_transaksi: {[key:number]: TransaksiDetail[]} = _.groupBy(list_all_item, td => td.layanan_id);
+    const list_transaksi_item_grouped: { nama_layanan: string, satuan: string, items: TransaksiDetail[] }[] = Object.keys(_group_transaksi).map((_layanan_id: string) => {
+      const layanan_id: number = +_layanan_id;
+      const layanan = loader_data.list_layanan.find(l => l.id == layanan_id);
+      return {
+        nama_layanan: layanan?.nama ?? '',
+        satuan: layanan?.label_satuan ?? '',
+        items: _group_transaksi[layanan_id]
+      };
+    })
 
     async function getData() {
       try {
@@ -96,6 +112,10 @@ export const Route = createFileRoute('/admin/transaksi/')({
             filter_pelanggan_id,
             filter_tanggal_from,
             filter_tanggal_to,
+            filter_paid_tanggal_from,
+            filter_paid_tanggal_to,
+            filter_picked_up_tanggal_from,
+            filter_picked_up_tanggal_to,
             keyword,
             filter_sudah_diambil,
             filter_sudah_lunas,
@@ -151,7 +171,21 @@ export const Route = createFileRoute('/admin/transaksi/')({
 
     useEffect(() => {
       getData();
-    }, [offset, limit, filter_pelanggan_id, filter_tanggal_from, filter_tanggal_to, keyword, filter_sudah_diambil, filter_sudah_lunas, filter_metode_pembayaran_list]);
+    }, [
+      offset,
+      limit,
+      filter_pelanggan_id,
+      filter_tanggal_from,
+      filter_tanggal_to,
+      filter_paid_tanggal_from,
+      filter_paid_tanggal_to,
+      filter_picked_up_tanggal_from,
+      filter_picked_up_tanggal_to,
+      keyword,
+      filter_sudah_diambil,
+      filter_sudah_lunas,
+      filter_metode_pembayaran_list
+    ]);
 
     return (
       <Layout className='flex flex-col gap-4'>
@@ -225,7 +259,7 @@ export const Route = createFileRoute('/admin/transaksi/')({
             <TableColumn>
               <div className='flex items-center gap-2'>
                 <div>
-                  Tanggal
+                  Tanggal Dibuat
                 </div>
                 <Popover placement='bottom'>
                   <PopoverTrigger
@@ -258,6 +292,100 @@ export const Route = createFileRoute('/admin/transaksi/')({
                       onClick={() => {
                         setFilterTanggalFrom(undefined);
                         setFilterTanggalTo(undefined);
+                      }}
+                      className='flex items-center gap-[2px] self-start text-red-400 hover:text-red-600 cursor-pointer'>
+                      <X size={14} className='mt-px' />
+                      <div>
+                        Clear
+                      </div>
+                    </div> }
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </TableColumn>
+            <TableColumn>
+              <div className='flex items-center gap-2'>
+                <div>
+                  Tanggal Dibayar
+                </div>
+                <Popover placement='bottom'>
+                  <PopoverTrigger
+                    className='outline-none'>
+                    <div className='relative'>
+                      <Funnel 
+                        className='cursor-pointer'
+                        size={17} />
+                      { (filter_paid_tanggal_from && filter_paid_tanggal_to) && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' /> }
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className='!px-2 !py-2'>
+                    <Input
+                      className='min-w-40'
+                      type='date'
+                      value={filter_paid_tanggal_from || ''}
+                      onChange={e => setFilterPaidTanggalFrom(e.target.value)}
+                      placeholder='From'
+                      label='From'
+                      labelPlacement='outside-top' />
+                    <Input
+                      className='min-w-40'
+                      type='date'
+                      value={filter_paid_tanggal_to || ''}
+                      onChange={e => setFilterPaidTanggalTo(e.target.value)}
+                      placeholder='To'
+                      label='To'
+                      labelPlacement='outside-top' />
+                    { (filter_paid_tanggal_from && filter_paid_tanggal_to) && <div 
+                      onClick={() => {
+                        setFilterPaidTanggalFrom(undefined);
+                        setFilterPaidTanggalTo(undefined);
+                      }}
+                      className='flex items-center gap-[2px] self-start text-red-400 hover:text-red-600 cursor-pointer'>
+                      <X size={14} className='mt-px' />
+                      <div>
+                        Clear
+                      </div>
+                    </div> }
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </TableColumn>
+            <TableColumn>
+              <div className='flex items-center gap-2'>
+                <div>
+                  Tanggal Diambil
+                </div>
+                <Popover placement='bottom'>
+                  <PopoverTrigger
+                    className='outline-none'>
+                    <div className='relative'>
+                      <Funnel 
+                        className='cursor-pointer'
+                        size={17} />
+                      { (filter_picked_up_tanggal_from && filter_picked_up_tanggal_to) && <div className='w-1 h-1 rounded-full bg-red-500 absolute top-[-2px] right-[-4px]' /> }
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className='!px-2 !py-2'>
+                    <Input
+                      className='min-w-40'
+                      type='date'
+                      value={filter_picked_up_tanggal_from || ''}
+                      onChange={e => setFilterPickedUpTanggalFrom(e.target.value)}
+                      placeholder='From'
+                      label='From'
+                      labelPlacement='outside-top' />
+                    <Input
+                      className='min-w-40'
+                      type='date'
+                      value={filter_picked_up_tanggal_to || ''}
+                      onChange={e => setFilterPickedUpTanggalTo(e.target.value)}
+                      placeholder='To'
+                      label='To'
+                      labelPlacement='outside-top' />
+                    { (filter_picked_up_tanggal_from && filter_picked_up_tanggal_to) && <div 
+                      onClick={() => {
+                        setFilterPickedUpTanggalFrom(undefined);
+                        setFilterPickedUpTanggalTo(undefined);
                       }}
                       className='flex items-center gap-[2px] self-start text-red-400 hover:text-red-600 cursor-pointer'>
                       <X size={14} className='mt-px' />
@@ -475,6 +603,12 @@ export const Route = createFileRoute('/admin/transaksi/')({
                     { moment(transaksi.transaksi.created_at).format('dddd, DD MMMM YYYY HH:mm') }
                   </TableCell>
                   <TableCell>
+                    { transaksi.transaksi.transition_to_paid_ts && moment(transaksi.transaksi.transition_to_paid_ts).format('dddd, DD MMMM YYYY HH:mm') }
+                  </TableCell>
+                  <TableCell>
+                    { transaksi.transaksi.transition_to_picked_up_ts && moment(transaksi.transaksi.transition_to_picked_up_ts).format('dddd, DD MMMM YYYY HH:mm') }
+                  </TableCell>
+                  <TableCell>
                     <div className='flex flex-col'>
                       <div>
                         { transaksi.pelanggan.nama }
@@ -537,6 +671,12 @@ export const Route = createFileRoute('/admin/transaksi/')({
               <TableCell>{''}</TableCell>
               <TableCell>{''}</TableCell>
               <TableCell>{''}</TableCell>
+              <TableCell>{''}</TableCell>
+              <TableCell>{ list_transaksi_item_grouped.map((item, i: number) => (
+                <div key={i}>
+                  <b>{ item.items.reduce((acc, curr) => +acc + +(curr.jumlah ?? '0'), 0) } { item.satuan }</b> { item.nama_layanan }
+                </div>
+              )) }</TableCell>
               <TableCell>{''}</TableCell>
               <TableCell>{''}</TableCell>
               <TableCell>{''}</TableCell>

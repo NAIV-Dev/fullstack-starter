@@ -13,6 +13,10 @@ api get /admin/transaksi {
     metode_pembayaran string
     filter_tanggal_from string
     filter_tanggal_to string
+    filter_picked_up_tanggal_from string
+    filter_picked_up_tanggal_to string
+    filter_paid_tanggal_from string
+    filter_paid_tanggal_to string
     filter_pelanggan_id number
     filter_metode_pembayaran_csv string
     filter_sudah_lunas boolean

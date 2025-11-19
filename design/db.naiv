@@ -44,6 +44,8 @@ table Transaksi {
   metode_pembayaran enum.MetodePembayaran notnull default=Tunai
   created_at timestamp notnull default=NOW()
   deleted_at timestamp
+  transition_to_paid_ts timestamp
+  transition_to_picked_up_ts timestamp
 }
 
 table TransaksiDetail {

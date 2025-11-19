@@ -17,4 +17,6 @@ export interface Transaksi {
   metode_pembayaran: MetodePembayaran;
   created_at: Date;
   deleted_at?: Date;
+  transition_to_paid_ts?: Date;
+  transition_to_picked_up_ts?: Date;
 }
