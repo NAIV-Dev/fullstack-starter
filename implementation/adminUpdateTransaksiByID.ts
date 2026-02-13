@@ -37,6 +37,16 @@ export const adminUpdateTransaksiByID: T_adminUpdateTransaksiByID = async req =>
       trx.pelanggan_id = req.body.pelanggan_id;
     }
   }
+
+  // update tanggal transaksi lunas
+  if (!trx.sudah_lunas && req.body.sudah_lunas) {
+    trx.transition_to_paid_ts = new Date();
+  }
+
+  // update tanggal transaksi diambil
+  if (!trx.sudah_diambil && req.body.sudah_diambil) {
+    trx.transition_to_picked_up_ts = new Date();
+  }
   
   trx.pengguna_id = req.body.pengguna_id ?? trx.pengguna_id;
   trx.tanggal_transaksi = req.body.tanggal_transaksi ? moment(req.body.tanggal_transaksi).toDate() : trx.tanggal_transaksi;
