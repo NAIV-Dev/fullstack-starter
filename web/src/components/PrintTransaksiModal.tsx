@@ -83,12 +83,11 @@ export function globalPrintReceipt(data: TransaksiFulldata, list_layanan: Layana
     "[L]\n" +
     data.list_item.map(item => {
       const layanan = list_layanan.find(l => l.id == item.layanan_id);
-      const max_len = 18;
       const nama_layanan = layanan?.nama ?? '';
-      const arr_name = nama_layanan.length > max_len ? nama_layanan.match(/.{1,18}/g) : [nama_layanan];
       return [
-        `[L]<b>${arr_name?.[0] ?? ''}</b>[R]${new Intl.NumberFormat('id-ID').format(+(item.jumlah ?? 0))} ${layanan?.label_satuan ?? ''}\n`,
-        ...(arr_name ?? []).slice(1).map(l => `[L]  ${l}\n`),
+        `[L]<b>${nama_layanan} (${layanan?.label_satuan ?? ''})</b>\n`,
+        `[R]${new Intl.NumberFormat('id-ID', { style: "currency", currency: "IDR" }).format(+(item.harga_satuan ?? 0))} x ${new Intl.NumberFormat('id-ID').format(+(item.jumlah ?? 0))}\n`,
+        `[R]${new Intl.NumberFormat('id-ID', { style: "currency", currency: "IDR" }).format(+(item.subtotal ?? 0))}\n`,
         "[L]\n"
       ].join('');
     }).join(''),
