@@ -157,7 +157,11 @@ export function DownloadButton(props: DownloadButtonProps) {
 
       doc.text(String(index + 1), 17, textY);
       doc.text(lines, 27, linesY);
-      doc.text(String(+(item.jumlah || 0)), 126, textY, { align: 'right' });
+
+      const satuan = item.otm_layanan_id?.label_satuan || layanan?.label_satuan || '';
+      const jumlahText = String(+(item.jumlah || 0)) + (satuan ? ' ' + satuan : '');
+
+      doc.text(jumlahText, 126, textY, { align: 'right' });
       doc.text(formatter_num.format(item.harga_satuan), 151, textY, { align: 'right' });
       doc.text(formatter_num.format(item.subtotal), 191, textY, { align: 'right' });
 
