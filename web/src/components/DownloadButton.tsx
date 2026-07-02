@@ -27,12 +27,12 @@ export function DownloadButton(props: DownloadButtonProps) {
     // 1. Header Section
     // Left: Logo and Shop Info
     doc.addImage(imgsrc, 'png', 15, 15, 30, 29);
-    
+
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(11);
     doc.setTextColor('#1A365D');
     doc.text('Wening Laundry', 50, 20);
-    
+
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
     doc.setTextColor('#4A5568');
@@ -72,17 +72,17 @@ export function DownloadButton(props: DownloadButtonProps) {
     doc.setFont('helvetica', 'bold');
     doc.setTextColor('#718096');
     doc.text('PELANGGAN / BILL TO', 15, 54);
-    
+
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor('#2D3748');
     doc.text(props.data.pelanggan.nama || '-', 15, 59);
-    
+
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor('#4A5568');
     doc.text(`Tel: ${props.data.pelanggan.nomor_hp || '-'}`, 15, 64);
-    
+
     const alamatLines = doc.splitTextToSize(props.data.pelanggan.alamat || '-', 80);
     doc.text(alamatLines, 15, 69);
 
@@ -91,12 +91,12 @@ export function DownloadButton(props: DownloadButtonProps) {
     doc.setFont('helvetica', 'bold');
     doc.setTextColor('#718096');
     doc.text('INFORMASI PEMBAYARAN', 110, 54);
-    
+
     doc.setFontSize(9);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor('#2D3748');
     doc.text(`Metode: ${props.data.transaksi.metode_pembayaran || '-'}`, 110, 59);
-    
+
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor('#4A5568');
@@ -157,7 +157,7 @@ export function DownloadButton(props: DownloadButtonProps) {
 
       doc.text(String(index + 1), 17, textY);
       doc.text(lines, 27, linesY);
-      doc.text(String(item.jumlah || 0), 126, textY, { align: 'right' });
+      doc.text(String(+(item.jumlah || 0)), 126, textY, { align: 'right' });
       doc.text(formatter_num.format(item.harga_satuan), 151, textY, { align: 'right' });
       doc.text(formatter_num.format(item.subtotal), 191, textY, { align: 'right' });
 
@@ -221,7 +221,7 @@ export function DownloadButton(props: DownloadButtonProps) {
     doc.setFontSize(9);
     doc.setTextColor('#4A5568');
     doc.text('Hormat Kami,', 165, footerY, { align: 'center' });
-    
+
     doc.setFont('helvetica', 'bold');
     doc.setTextColor('#1A365D');
     doc.text('Wening Laundry', 165, footerY + 5, { align: 'center' });
