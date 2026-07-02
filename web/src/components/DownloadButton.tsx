@@ -11,115 +11,236 @@ interface DownloadButtonProps {
 
 export function DownloadButton(props: DownloadButtonProps) {
   const handlePrint = () => {
-    function createDoc(pdf?: jsPDF) {
-      const doc = pdf ?? new jsPDF({
-        orientation: 'p',
-        format: [5, 8].map(x => x),
-        unit: 'cm',
-      });
-
-      const formatter_num = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 2 });
-
-      // Adding the fonts.
-      doc.setFontSize(10);
-      doc.setFillColor('#000');
-      doc.addImage(imgsrc, 'png', 1, 0, 3.1, 3);
-      doc.setFont('', 'normal').text(props.data.transaksi.nomor_transaksi, 2.5, 3.3, { maxWidth: 5, align: 'center' }).setFont('', 'normal');
-
-      doc.setFontSize(10);
-
-      doc.setFont('', 'normal').text('Name', .1, 4, { maxWidth: 5, align: 'left' }).setFont('', 'normal');
-      doc.text(': ' + props.data.pelanggan.nama, 1.8, 4, { maxWidth: 5, align: 'left' });
-
-      doc.setFont('', 'normal').text('Phone', .1, 4.45, { maxWidth: 5, align: 'left' }).setFont('', 'normal');
-      doc.text(': ' + props.data.pelanggan.nomor_hp, 1.8, 4.45, { maxWidth: 5, align: 'left' });
-
-      doc.setFontSize(8);
-
-      doc.setFont('', 'normal').text('Items', .1, 5, { maxWidth: 2.3, align: 'left' }).setFont('', 'normal');
-      doc.setFont('', 'normal').text('Amt', 2.45, 5, { maxWidth: 1, align: 'left' }).setFont('', 'normal');
-      doc.setFont('', 'normal').text('Price', 3, 5, { maxWidth: 1, align: 'left' }).setFont('', 'normal');
-      doc.setFont('', 'normal').text('SubT', 3.9, 5, { maxWidth: 1, align: 'left' }).setFont('', 'normal');
-
-      doc.setLineWidth(.015).line(.1, 5.15, 4.9, 5.15);
-
-      let y = 5.45;
-      for (const item of props.data.list_item) {
-        const layanan = props.listLayanan.find(l => l.id == item.layanan_id)!;
-        const max_height = Math.max(
-          doc.getTextDimensions(layanan.nama ?? '', { maxWidth: 2.3 }).h,
-          doc.getTextDimensions('' + String(item.jumlah), { maxWidth: 1 }).h,
-          doc.getTextDimensions('' + formatter_num.format(+layanan.harga_satuan), { maxWidth: 1 }).h,
-          doc.getTextDimensions('' + formatter_num.format(+item.subtotal), { maxWidth: 1 }).h,
-        );
-        doc.setFont('', 'normal').text(layanan.nama, .1, y, { maxWidth: 2.3, align: 'left' }).setFont('', 'normal');
-        doc.setFont('', 'normal').text('' + +(item.jumlah || 0), 2.45, y, { maxWidth: 1, align: 'left' }).setFont('', 'normal');
-        doc.setFont('', 'normal').text('' + formatter_num.format(+layanan.harga_satuan), 3, y, { maxWidth: 1, align: 'left' }).setFont('', 'normal');
-        doc.setFont('', 'normal').text('' + formatter_num.format(+item.subtotal), 3.9, y, { maxWidth: 1, align: 'left' }).setFont('', 'normal');
-        y += max_height + .12;
-      }
-
-      doc.setLineWidth(.015).line(.1, y - .22, 4.9, y - .22);
-      y += .12;
-
-      doc.setFontSize(8.5);
-      doc.setFont('', 'normal').text('Total', 2.9, y, { maxWidth: 1, align: 'left' }).setFont('', 'normal');
-      doc.setFont('', 'normal').text('' + formatter_num.format(+props.data.transaksi.total_harga), 3.87, y, { maxWidth: 1, align: 'left' }).setFont('', 'normal');
-
-      if (props.data.transaksi.sudah_lunas) {
-        doc.addImage(lunassrc, 'png', 0.3, y-2, 4.3, 3);
-      }
-      y += .4;
-      doc.setFont('', 'bold').text(props.data.transaksi.sudah_lunas ? 'SUDAH LUNAS' : 'BELUM LUNAS', 4.8, y, { maxWidth: 4, align: 'right' }).setFont('', 'normal');
-
-      y += .7;
-      doc.setFontSize(8);
-      doc.setFont('', 'bold').text('Wening Laundry', .1, y, { maxWidth: 5, align: 'left' }).setFont('', 'normal');
-
-      y += .25;
-      doc.setFontSize(8);
-      // doc.addImage('https://upload.wikimedia.org/wikipedia/commons/c/c4/Globe_icon.svg', 'png', .1, y, .23, .23);
-      doc.setFont('', 'bold').text('WEB', .1, y + .2, { maxWidth: 4.3, align: 'left' }).setFont('', 'normal');
-      doc.setFont('', 'normal').text('wening-laundry.com', .9, y + .16, { maxWidth: 4.3, align: 'left' }).setFont('', 'normal');
-
-      y += .36;
-      // doc.addImage('https://static-00.iconduck.com/assets.00/alternate-phone-icon-256x256-e459268b.png', 'png', .1, y, .23, .23);
-      doc.setFont('', 'bold').text('TEL', .1, y + .2, { maxWidth: 4.3, align: 'left' }).setFont('', 'normal');
-      doc.setFont('', 'normal').text('0812-2266-1353', .9, y + .2, { maxWidth: 4.3, align: 'left' }).setFont('', 'normal');
-
-      y += .36;
-      // doc.addImage('https://cdn-icons-png.flaticon.com/256/74/74627.png', 'png', .1, y, .23, .23);
-      doc.setFont('', 'bold').text('ALT', .1, y + .2, { maxWidth: 4.3, align: 'left' }).setFont('', 'normal');
-      doc.setFont('', 'normal').text('Jalan Gongseng Barat Raya', .9, y + .2, { maxWidth: 4.3, align: 'left' }).setFont('', 'normal');
-
-      y += .8;
-      doc.setFont('', 'normal').text('TERIMA KASIH', 2.5, y, { maxWidth: 5, align: 'center' }).setFont('', 'normal');
-
-      y += .8;
-      doc.text(`\
-Ketentuan:
-a. Pengambilan barang WAJIB disertai nota Asli (Whatsapp/Print)
-b. Barang yang tidak diambil dalam 1 Bulan, Hilang/Rusak diluar tanggung jawab kami
-c. Klaim LUNTUR tidak dipisah diluar tanggung jawab kami
-d. Menghilangkan noda harus direquest dan dikenakan biaya tambahan
-e. Hak klaim berlaku 1x24 jam setelah barang diambil (Diluar jam tersebut komplain tidak akan diproses)
-f. Penggantian barang rusak/luntur tidak dapat diganti dengan harga baru
-f. Dengan menerima NOTA ini, maka pelanggan dianggap setuju dengan Syarat & Ketentuan pelayanan WENING LAUNDRY
-
-`, .1, y, { maxWidth: 4.8 });
-
-      y += 3.1;
-      return y;
-    }
-
-    const last_y = createDoc();
     const doc = new jsPDF({
       orientation: 'p',
-      format: [5, last_y + 4].map(x => x),
-      unit: 'cm',
+      unit: 'mm',
+      format: 'a4',
     });
-    createDoc(doc);
-    doc.save(`receipt-${new Date().getTime()}`);
+
+    const formatter_num = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 2 });
+    const tanggal = new Date(props.data.transaksi.tanggal_transaksi).toLocaleDateString('id-ID', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    // 1. Header Section
+    // Left: Logo and Shop Info
+    doc.addImage(imgsrc, 'png', 15, 15, 30, 29);
+    
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor('#1A365D');
+    doc.text('Wening Laundry', 50, 20);
+    
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor('#4A5568');
+    doc.text('Jalan Gongseng Barat Raya', 50, 25);
+    doc.text('Tel: 0812-2266-1353', 50, 30);
+    doc.text('wening-laundry.com', 50, 35);
+
+    // Right: Invoice Info
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(22);
+    doc.setTextColor('#1A365D');
+    doc.text('INVOICE', 195, 21, { align: 'right' });
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor('#4A5568');
+    doc.text(`Nomor: ${props.data.transaksi.nomor_transaksi || '-'}`, 195, 27, { align: 'right' });
+    doc.text(`Tanggal: ${tanggal}`, 195, 32, { align: 'right' });
+
+    // Status Badge
+    const isLunas = props.data.transaksi.sudah_lunas;
+    doc.setFillColor(isLunas ? '#DEF7EC' : '#FDE8E8');
+    doc.roundedRect(159, 36, 36, 6, 1, 1, 'F');
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(isLunas ? '#03543F' : '#9B1C1C');
+    doc.text(isLunas ? 'LUNAS / PAID' : 'BELUM LUNAS', 177, 39, { align: 'center', baseline: 'middle' });
+
+    // Divider Line
+    doc.setDrawColor('#E2E8F0');
+    doc.setLineWidth(0.5);
+    doc.line(15, 47, 195, 47);
+
+    // 2. Billing & Customer Info Section
+    // Left: Customer Info
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor('#718096');
+    doc.text('PELANGGAN / BILL TO', 15, 54);
+    
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor('#2D3748');
+    doc.text(props.data.pelanggan.nama || '-', 15, 59);
+    
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor('#4A5568');
+    doc.text(`Tel: ${props.data.pelanggan.nomor_hp || '-'}`, 15, 64);
+    
+    const alamatLines = doc.splitTextToSize(props.data.pelanggan.alamat || '-', 80);
+    doc.text(alamatLines, 15, 69);
+
+    // Right: Payment Info
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor('#718096');
+    doc.text('INFORMASI PEMBAYARAN', 110, 54);
+    
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor('#2D3748');
+    doc.text(`Metode: ${props.data.transaksi.metode_pembayaran || '-'}`, 110, 59);
+    
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor('#4A5568');
+    const catatanLines = doc.splitTextToSize(`Catatan: ${props.data.transaksi.catatan || '-'}`, 80);
+    doc.text(catatanLines, 110, 64);
+
+    // Divider Line
+    doc.setDrawColor('#E2E8F0');
+    doc.setLineWidth(0.5);
+    doc.line(15, 82, 195, 82);
+
+    // 3. Services/Items Table
+    function drawTableHeader(yPos: number) {
+      doc.setFillColor('#1A365D');
+      doc.rect(15, yPos, 180, 8, 'F');
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor('#FFFFFF');
+      doc.text('No.', 17, yPos + 5.5);
+      doc.text('Layanan / Service', 27, yPos + 5.5);
+      doc.text('Jumlah', 126, yPos + 5.5, { align: 'right' });
+      doc.text('Harga Satuan', 151, yPos + 5.5, { align: 'right' });
+      doc.text('Subtotal', 191, yPos + 5.5, { align: 'right' });
+    }
+
+    drawTableHeader(87);
+    let y = 95;
+
+    props.data.list_item.forEach((item, index) => {
+      const layanan = props.listLayanan.find(l => l.id == item.layanan_id);
+      const namaLayanan = layanan?.nama || 'Layanan Tidak Diketahui';
+      const lines = doc.splitTextToSize(namaLayanan, 85);
+      const row_height = Math.max(lines.length * 5, 8);
+
+      if (y + row_height > 260) {
+        doc.addPage();
+        drawTableHeader(15);
+        y = 23;
+      }
+
+      // Alternating row background
+      if (index % 2 === 1) {
+        doc.setFillColor('#F8FAFC');
+        doc.rect(15, y, 180, row_height, 'F');
+      }
+
+      // Border bottom
+      doc.setDrawColor('#E2E8F0');
+      doc.setLineWidth(0.2);
+      doc.line(15, y + row_height, 195, y + row_height);
+
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor('#2D3748');
+
+      const textY = y + row_height / 2 + 1;
+      const linesY = y + (row_height - (lines.length * 4)) / 2 + 3;
+
+      doc.text(String(index + 1), 17, textY);
+      doc.text(lines, 27, linesY);
+      doc.text(String(item.jumlah || 0), 126, textY, { align: 'right' });
+      doc.text(formatter_num.format(item.harga_satuan), 151, textY, { align: 'right' });
+      doc.text(formatter_num.format(item.subtotal), 191, textY, { align: 'right' });
+
+      y += row_height;
+    });
+
+    // 4. Totals Block
+    y += 10;
+    if (y > 250) {
+      doc.addPage();
+      y = 20;
+    }
+
+    doc.setDrawColor('#1A365D');
+    doc.setLineWidth(0.5);
+    doc.line(120, y - 4, 195, y - 4);
+    doc.line(120, y + 4, 195, y + 4);
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor('#2D3748');
+    doc.text('TOTAL:', 150, y, { baseline: 'middle' });
+
+    doc.setFontSize(12);
+    doc.setTextColor('#1A365D');
+    doc.text('Rp ' + formatter_num.format(props.data.transaksi.total_harga), 191, y, { align: 'right', baseline: 'middle' });
+
+    // 5. Terms & Conditions and Signature Section
+    let footerY = Math.max(y + 20, 220);
+    if (footerY > 240) {
+      doc.addPage();
+      footerY = 20;
+    }
+
+    // Terms & Conditions
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor('#4A5568');
+    doc.text('KETENTUAN & SYARAT', 15, footerY);
+
+    const terms = [
+      "a. Pengambilan barang WAJIB disertai nota Asli (Whatsapp/Print)",
+      "b. Barang yang tidak diambil dalam 1 Bulan, Hilang/Rusak diluar tanggung jawab kami",
+      "c. Klaim LUNTUR tidak dipisah diluar tanggung jawab kami",
+      "d. Menghilangkan noda harus direquest dan dikenakan biaya tambahan",
+      "e. Hak klaim berlaku 1x24 jam setelah barang diambil (komplain >24 jam tidak diproses)",
+      "f. Penggantian barang rusak/luntur tidak dapat diganti dengan harga baru",
+      "g. Dengan menerima NOTA ini, maka pelanggan dianggap setuju dengan Syarat & Ketentuan Wening Laundry"
+    ];
+
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor('#718096');
+    let termY = footerY + 5;
+    terms.forEach(term => {
+      doc.text(term, 15, termY, { maxWidth: 110 });
+      termY += 4.5;
+    });
+
+    // Signature Area
+    doc.setFontSize(9);
+    doc.setTextColor('#4A5568');
+    doc.text('Hormat Kami,', 165, footerY, { align: 'center' });
+    
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor('#1A365D');
+    doc.text('Wening Laundry', 165, footerY + 5, { align: 'center' });
+
+    doc.setDrawColor('#A0AEC0');
+    doc.setLineWidth(0.5);
+    doc.line(145, footerY + 28, 185, footerY + 28);
+
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor('#718096');
+    doc.text('( Staf / Kasir )', 165, footerY + 32, { align: 'center' });
+
+    // Paid Stamp
+    if (isLunas) {
+      doc.addImage(lunassrc, 'png', 138, footerY + 7, 40, 26);
+    }
+
+    doc.save(`receipt-${props.data.transaksi.nomor_transaksi || new Date().getTime()}.pdf`);
   };
 
   return (
